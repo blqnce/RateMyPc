@@ -53,79 +53,23 @@ fun SettingsScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     var avatarChanged by remember { mutableStateOf(false) }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            horizontal = 20.dp,
-            vertical = 16.dp
-        ),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            SettingsHeader(onBack = onBack)
-        }
-
-        item {
-            ProfileSettingsCard(
-                avatarChanged = avatarChanged,
-                onChangeAvatar = { avatarChanged = !avatarChanged },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        item {
-            SettingsSection(title = "Account") {
-                SettingsOptionRow(Icons.Outlined.Email, "Cambiar correo", "techwizard92@email.com")
-                SettingsOptionRow(Icons.Outlined.Lock, "Cambiar contraseña", "Actualiza tu contraseña")
-                SettingsSwitchRow(
-                    icon = Icons.Outlined.Shield,
-                    title = "Autenticación de dos factores",
-                    checked = twoFactorEnabled,
-                    onCheckedChange = { twoFactorEnabled = it }
-                )
-            }
-        }
-
-        item {
-            SettingsSection(title = "Notifications") {
-                SettingsSwitchRow(
-                    icon = Icons.Outlined.Notifications,
-                    title = "Notificaciones push",
-                    checked = pushNotificationsEnabled,
-                    onCheckedChange = { pushNotificationsEnabled = it }
-                )
-                SettingsSwitchRow(
-                    icon = Icons.Outlined.Email,
-                    title = "Notificaciones por correo",
-                    checked = emailNotificationsEnabled,
-                    onCheckedChange = { emailNotificationsEnabled = it }
-                )
-            }
-        }
-
-        item {
-            SettingsSection(title = "Privacy") {
-                SettingsSwitchRow(
-                    icon = Icons.Outlined.Visibility,
-                    title = "Perfil visible",
-                    checked = profileVisible,
-                    onCheckedChange = { profileVisible = it }
-                )
-                SettingsSwitchRow(
-                    icon = Icons.Outlined.Group,
-                    title = "Permitir seguidores",
-                    checked = followersAllowed,
-                    onCheckedChange = { followersAllowed = it }
-                )
-            }
-        }
-
-        item {
-            DangerZoneCard(onDeleteAccount = { showDeleteDialog = true })
-        }
-    }
+    SettingsScreenContent(
+        modifier = modifier,
+        onBack = onBack,
+        twoFactorEnabled = twoFactorEnabled,
+        onTwoFactorChange = { twoFactorEnabled = it },
+        pushNotificationsEnabled = pushNotificationsEnabled,
+        onPushNotificationsChange = { pushNotificationsEnabled = it },
+        emailNotificationsEnabled = emailNotificationsEnabled,
+        onEmailNotificationsChange = { emailNotificationsEnabled = it },
+        profileVisible = profileVisible,
+        onProfileVisibleChange = { profileVisible = it },
+        followersAllowed = followersAllowed,
+        onFollowersAllowedChange = { followersAllowed = it },
+        avatarChanged = avatarChanged,
+        onAvatarChange = { avatarChanged = !avatarChanged },
+        onDeleteAccountClick = { showDeleteDialog = true }
+    )
 
     if (showDeleteDialog) {
         AlertDialog(
@@ -143,6 +87,99 @@ fun SettingsScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+fun SettingsScreenContent(
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit,
+    twoFactorEnabled: Boolean,
+    onTwoFactorChange: (Boolean) -> Unit,
+    pushNotificationsEnabled: Boolean,
+    onPushNotificationsChange: (Boolean) -> Unit,
+    emailNotificationsEnabled: Boolean,
+    onEmailNotificationsChange: (Boolean) -> Unit,
+    profileVisible: Boolean,
+    onProfileVisibleChange: (Boolean) -> Unit,
+    followersAllowed: Boolean,
+    onFollowersAllowedChange: (Boolean) -> Unit,
+    avatarChanged: Boolean,
+    onAvatarChange: () -> Unit,
+    onDeleteAccountClick: () -> Unit
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+            horizontal = 20.dp,
+            vertical = 16.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            SettingsHeader(onBack = onBack)
+        }
+
+        item {
+            ProfileSettingsCard(
+                avatarChanged = avatarChanged,
+                onChangeAvatar = onAvatarChange,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        item {
+            SettingsSection(title = "Account") {
+                SettingsOptionRow(Icons.Outlined.Email, "Cambiar correo", "techwizard92@email.com")
+                SettingsOptionRow(Icons.Outlined.Lock, "Cambiar contraseña", "Actualiza tu contraseña")
+                SettingsSwitchRow(
+                    icon = Icons.Outlined.Shield,
+                    title = "Autenticación de dos factores",
+                    checked = twoFactorEnabled,
+                    onCheckedChange = onTwoFactorChange
+                )
+            }
+        }
+
+        item {
+            SettingsSection(title = "Notifications") {
+                SettingsSwitchRow(
+                    icon = Icons.Outlined.Notifications,
+                    title = "Notificaciones push",
+                    checked = pushNotificationsEnabled,
+                    onCheckedChange = onPushNotificationsChange
+                )
+                SettingsSwitchRow(
+                    icon = Icons.Outlined.Email,
+                    title = "Notificaciones por correo",
+                    checked = emailNotificationsEnabled,
+                    onCheckedChange = onEmailNotificationsChange
+                )
+            }
+        }
+
+        item {
+            SettingsSection(title = "Privacy") {
+                SettingsSwitchRow(
+                    icon = Icons.Outlined.Visibility,
+                    title = "Perfil visible",
+                    checked = profileVisible,
+                    onCheckedChange = onProfileVisibleChange
+                )
+                SettingsSwitchRow(
+                    icon = Icons.Outlined.Group,
+                    title = "Permitir seguidores",
+                    checked = followersAllowed,
+                    onCheckedChange = onFollowersAllowedChange
+                )
+            }
+        }
+
+        item {
+            DangerZoneCard(onDeleteAccount = onDeleteAccountClick)
+        }
     }
 }
 

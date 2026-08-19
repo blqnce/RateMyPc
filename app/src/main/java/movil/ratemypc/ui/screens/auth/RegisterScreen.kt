@@ -1,5 +1,6 @@
 package movil.ratemypc.ui.screens.auth
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,24 +22,6 @@ fun RegisterScreen(
     onRegistered: () -> Unit,
     onBack: () -> Unit
 ) {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        RegisterScreenContent(
-            onRegistered = onRegistered,
-            onBack       = onBack
-        )
-    }
-}
-
-@Composable
-fun RegisterScreenContent(
-    onRegistered: () -> Unit,
-    onBack: () -> Unit
-){
 
     var name              by remember { mutableStateOf("") }
     var email             by remember { mutableStateOf("") }
@@ -76,20 +59,12 @@ fun RegisterScreenContent(
 
     val scrollState  = rememberScrollState()
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(horizontal = 28.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Spacer(Modifier.height(56.dp))
-
-        RegisterHeader()
-
-        Spacer(Modifier.height(32.dp))
-
-        RegisterForm(
+        RegisterScreenContent(
             name = name,
             onNameChange = { name = it; nameError = null },
             nameError = nameError,
@@ -107,7 +82,68 @@ fun RegisterScreenContent(
             confirmVisible = confirmVisible,
             onToggleConfirmVisibility = { confirmVisible = !confirmVisible },
             isLoading = isLoading,
-            onRegisterClick = { onRegisterClick() }
+            onRegisterClick = { onRegisterClick() },
+            scrollState = scrollState,
+            onBack = onBack
+        )
+    }
+}
+
+@Composable
+fun RegisterScreenContent(
+    name: String,
+    onNameChange: (String) -> Unit,
+    nameError: String?,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    emailError: String?,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordError: String?,
+    passwordVisible: Boolean,
+    onTogglePasswordVisibility: () -> Unit,
+    confirmPassword: String,
+    onConfirmPasswordChange: (String) -> Unit,
+    confirmError: String?,
+    confirmVisible: Boolean,
+    onToggleConfirmVisibility: () -> Unit,
+    isLoading: Boolean,
+    onRegisterClick: () -> Unit,
+    scrollState: ScrollState,
+    onBack: () -> Unit
+){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(horizontal = 28.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.height(56.dp))
+
+        RegisterHeader()
+
+        Spacer(Modifier.height(32.dp))
+
+        RegisterForm(
+            name = name,
+            onNameChange = onNameChange,
+            nameError = nameError,
+            email = email,
+            onEmailChange = onEmailChange,
+            emailError = emailError,
+            password = password,
+            onPasswordChange = onPasswordChange,
+            passwordError = passwordError,
+            passwordVisible = passwordVisible,
+            onTogglePasswordVisibility = onTogglePasswordVisibility,
+            confirmPassword = confirmPassword,
+            onConfirmPasswordChange = onConfirmPasswordChange,
+            confirmError = confirmError,
+            confirmVisible = confirmVisible,
+            onToggleConfirmVisibility = onToggleConfirmVisibility,
+            isLoading = isLoading,
+            onRegisterClick = onRegisterClick
         )
 
         Spacer(Modifier.height(24.dp))

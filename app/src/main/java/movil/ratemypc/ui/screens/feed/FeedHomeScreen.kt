@@ -23,17 +23,9 @@ import movil.ratemypc.viewmodel.ComponenteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedHomeScreen() {
-
-    FeedhomeScreenContent()
-}
-
-@Composable
-fun FeedhomeScreenContent(
+fun FeedHomeScreen(
     viewModel: ComponenteViewModel = viewModel()
-
-){
-
+) {
     var selectedCategory by remember { mutableStateOf("Todo") }
     var searchQuery by remember { mutableStateOf("") }
 
@@ -50,6 +42,25 @@ fun FeedhomeScreenContent(
         matchesCategory && matchesSearch
     }
 
+    FeedhomeScreenContent(
+        selectedCategory = selectedCategory,
+        onCategoryChange = { selectedCategory = it },
+        searchQuery = searchQuery,
+        onSearchQueryChange = { searchQuery = it },
+        dynamicCategories = dynamicCategories,
+        filtered = filtered
+    )
+}
+
+@Composable
+fun FeedhomeScreenContent(
+    selectedCategory: String,
+    onCategoryChange: (String) -> Unit,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    dynamicCategories: List<String>,
+    filtered: List<Componente>
+){
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +78,7 @@ fun FeedhomeScreenContent(
 
                 Buscador(
                     searchQuery = searchQuery,
-                    onSearchQueryChange = { searchQuery = it }
+                    onSearchQueryChange = onSearchQueryChange
                 )
 
                 Spacer(Modifier.height(12.dp))
@@ -82,7 +93,7 @@ fun FeedhomeScreenContent(
                 items(dynamicCategories) { subcategoria ->
                     val isSelected = selectedCategory == subcategoria
                     AssistChip(
-                        onClick = { selectedCategory = subcategoria },
+                        onClick = { onCategoryChange(subcategoria) },
                         label = { Text(subcategoria) },
                         colors = AssistChipDefaults.assistChipColors(
                             containerColor = if (isSelected)

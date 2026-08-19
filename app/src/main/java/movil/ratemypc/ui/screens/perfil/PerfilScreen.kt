@@ -25,17 +25,21 @@ import movil.ratemypc.ui.screens.perfil.PerfilComponents.TabPerfil
 fun PerfilScreen(
     onOpenSettings: () -> Unit = {}
 ) {
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    PerfilScreenContent(onOpenSettings = onOpenSettings)
+    PerfilScreenContent(
+        selectedTabIndex = selectedTabIndex,
+        onTabSelected = { selectedTabIndex = it },
+        onOpenSettings = onOpenSettings
+    )
 }
 
 @Composable
 fun PerfilScreenContent(
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit,
     onOpenSettings: () -> Unit = {}
 ){
-
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +101,7 @@ fun PerfilScreenContent(
         item {
             TabPerfil(
                 selectedTabIndex = selectedTabIndex,
-                onTabSelected = { selectedTabIndex = it },
+                onTabSelected = onTabSelected,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
             Spacer(Modifier.height(24.dp))

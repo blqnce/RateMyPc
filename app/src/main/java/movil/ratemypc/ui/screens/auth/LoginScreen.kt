@@ -1,6 +1,7 @@
 package movil.ratemypc.ui.screens.auth
 
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,18 +19,6 @@ import movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents.ToRegister
 
 @Composable
 fun LoginScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        LoginScreenContent()
-    }
-}
-
-@Composable
-fun LoginScreenContent(){
-
     var email           by remember { mutableStateOf("") }
     var password        by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -50,6 +39,41 @@ fun LoginScreenContent(){
 
     val scrollState  = rememberScrollState()
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        LoginScreenContent(
+            email = email,
+            onEmailChange = { email = it; emailError = null },
+            emailError = emailError,
+            password = password,
+            onPasswordChange = { password = it; passwordError = null },
+            passwordError = passwordError,
+            passwordVisible = passwordVisible,
+            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
+            isLoading = isLoading,
+            onLoginClick = { onLoginClick() },
+            scrollState = scrollState
+        )
+    }
+}
+
+@Composable
+fun LoginScreenContent(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    emailError: String?,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordError: String?,
+    passwordVisible: Boolean,
+    onTogglePasswordVisibility: () -> Unit,
+    isLoading: Boolean,
+    onLoginClick: () -> Unit,
+    scrollState: ScrollState
+){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,15 +87,15 @@ fun LoginScreenContent(){
 
         LoginForm(
             email = email,
-            onEmailChange = { email = it; emailError = null },
+            onEmailChange = onEmailChange,
             emailError = emailError,
             password = password,
-            onPasswordChange = { password = it; passwordError = null },
+            onPasswordChange = onPasswordChange,
             passwordError = passwordError,
             passwordVisible = passwordVisible,
-            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
+            onTogglePasswordVisibility = onTogglePasswordVisibility,
             isLoading = isLoading,
-            onLoginClick = { onLoginClick() }
+            onLoginClick = onLoginClick
         )
 
         Spacer(Modifier.height(24.dp))

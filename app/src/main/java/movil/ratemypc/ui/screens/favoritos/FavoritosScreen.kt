@@ -35,6 +35,23 @@ fun FavoritosScreen(
     var selectedTab by remember { mutableIntStateOf(0) }
     val favoritos = componentes.take(2)
 
+    FavoritosScreenContent(
+        modifier = modifier,
+        favoritos = favoritos,
+        selectedTab = selectedTab,
+        onTabSelected = { selectedTab = it },
+        onOpenCompatibility = onOpenCompatibility
+    )
+}
+
+@Composable
+fun FavoritosScreenContent(
+    modifier: Modifier = Modifier,
+    favoritos: List<movil.ratemypc.data.Componente>,
+    selectedTab: Int,
+    onTabSelected: (Int) -> Unit,
+    onOpenCompatibility: () -> Unit
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -49,7 +66,7 @@ fun FavoritosScreen(
         item {
             FavoritosTabSelector(
                 selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+                onTabSelected = onTabSelected
             )
         }
 

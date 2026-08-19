@@ -55,6 +55,33 @@ fun CompatibilidadScreen(
     val powerLimit = 750
     val totalCost = selectedComponents.sumOf { it.costo.toDouble() }
 
+    CompatibilidadScreenContent(
+        modifier = modifier,
+        analyzed = analyzed,
+        onAnalyzeClick = { analyzed = true },
+        score = if (analyzed) score else 0,
+        estimatedPower = estimatedPower,
+        powerLimit = powerLimit,
+        totalCost = totalCost,
+        selectedComponents = selectedComponents,
+        selectedCategories = selectedCategories,
+        requiredCategories = requiredCategories
+    )
+}
+
+@Composable
+fun CompatibilidadScreenContent(
+    modifier: Modifier = Modifier,
+    analyzed: Boolean,
+    onAnalyzeClick: () -> Unit,
+    score: Int,
+    estimatedPower: Int,
+    powerLimit: Int,
+    totalCost: Double,
+    selectedComponents: List<movil.ratemypc.data.Componente>,
+    selectedCategories: Set<String>,
+    requiredCategories: List<String>
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -77,7 +104,7 @@ fun CompatibilidadScreen(
         }
 
         item {
-            CompatibilityScoreCard(score = if (analyzed) score else 0)
+            CompatibilityScoreCard(score = score)
         }
 
         item {
@@ -136,7 +163,7 @@ fun CompatibilidadScreen(
 
         item {
             Button(
-                onClick = { analyzed = true },
+                onClick = onAnalyzeClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(if (analyzed) "Actualizar análisis" else "Analizar compatibilidad")
