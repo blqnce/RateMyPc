@@ -28,7 +28,7 @@ import movil.ratemypc.viewmodel.ComponenteViewModel
 @Composable
 fun FavoritosScreen(
     viewModel: ComponenteViewModel = viewModel(),
-    onOpenCompatibility: () -> Unit,
+    onOpenCompatibility: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val componentes by viewModel.componentes.collectAsState()
@@ -73,13 +73,11 @@ fun FavoritosScreen(
 }
 
 
-@Preview(showBackground = true)
+
 @Composable
+@Preview(showBackground = true)
 fun FavoritosScreenPreview() {
     RateMyPcTheme {
-        FavoritosScreen(
-            viewModel = ComponenteViewModel(),
-            onOpenCompatibility = {}
-        )
+        FavoritosScreen()
     }
 }

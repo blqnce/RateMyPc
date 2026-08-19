@@ -2,7 +2,6 @@ package movil.ratemypc.ui.screens.compatibilidad
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,16 +14,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,7 +33,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import movil.ratemypc.data.Componente
+import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.ComponentChecklistRow
+import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.CompatibilityDetails
+import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.CompatibilityScoreCard
+import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.PowerBudgetCard
 import movil.ratemypc.ui.theme.RateMyPcTheme
 import movil.ratemypc.viewmodel.ComponenteViewModel
 
@@ -182,176 +181,11 @@ fun CompatibilidadScreen(
     }
 }
 
-@Composable
-private fun CompatibilityScoreCard(
-    score: Int,
-    modifier: Modifier = Modifier
-) {
-    val scoreColor = when {
-        score >= 75 -> MaterialTheme.colorScheme.primary
-        score >= 40 -> MaterialTheme.colorScheme.tertiary
-        else -> MaterialTheme.colorScheme.error
-    }
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Puntuación de compatibilidad", style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(8.dp))
-            Box(contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    progress = { score / 100f },
-                    modifier = Modifier.size(132.dp),
-                    color = scoreColor,
-                    trackColor = MaterialTheme.colorScheme.surface
-                )
-                Text(
-                    text = "$score%",
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold,
-                    color = scoreColor
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = if (score == 0) "Pulsa analizar para comprobar la build" else "Análisis basado en los componentes seleccionados",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun CompatibilityDetails(
-    missingCategories: List<String>,
-    selectedComponents: List<Componente>,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Outlined.Warning,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                    Spacer(Modifier.size(8.dp))
-                    Text("Problemas detectados", style = MaterialTheme.typography.titleMedium)
-                }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = if (missingCategories.isEmpty()) {
-                        "No se detectaron categorías faltantes."
-                    } else {
-                        "Faltan: ${missingCategories.joinToString()}."
-                    },
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.CheckCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(Modifier.size(8.dp))
-                    Text("Puntos destacados", style = MaterialTheme.typography.titleMedium)
-                }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = if (selectedComponents.isEmpty()) {
-                        "Agrega componentes para iniciar el análisis."
-                    } else {
-                        "${selectedComponents.size} componentes listos para revisar."
-                    },
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PowerBudgetCard(
-    estimatedPower: Int,
-    powerLimit: Int,
-    modifier: Modifier = Modifier
-) {
-    val progress = (estimatedPower.toFloat() / powerLimit).coerceIn(0f, 1f)
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Presupuesto de energía", style = MaterialTheme.typography.titleMedium)
-                Text("$estimatedPower / $powerLimit W", style = MaterialTheme.typography.labelMedium)
-            }
-            Spacer(Modifier.height(10.dp))
-            LinearProgressIndicator(
-                progress = { progress },
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
-
-@Composable
-private fun ComponentChecklistRow(
-    category: String,
-    included: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = if (included) Icons.Filled.CheckCircle else Icons.Outlined.Circle,
-            contentDescription = null,
-            tint = if (included) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-            modifier = Modifier.size(22.dp)
-        )
-        Spacer(Modifier.size(12.dp))
-        Text(category, style = MaterialTheme.typography.bodyLarge)
-        Spacer(Modifier.weight(1f))
-        Text(
-            text = if (included) "Incluido" else "Pendiente",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
 fun CompatibilidadScreenPreview() {
     RateMyPcTheme {
-        CompatibilidadScreen(viewModel = ComponenteViewModel())
+        CompatibilidadScreen()
     }
 }
