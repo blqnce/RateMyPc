@@ -47,7 +47,6 @@ fun RateMyPcNavHost(
 
         composable(Screen.FeedHome.route) {
             FeedHomeScreen(
-                viewModel        = ComponenteViewModel,
                 // Añadir pantalla de un componente especifico
             )
         }

@@ -91,3 +91,38 @@ fun LoginScreenContent(){
 fun LoginScreenComposable(){
     LoginScreen()
 }
+
+@Preview(showBackground = true)
+@Composable
+fun LoginFormPreview(){
+    LoginForm(
+        email = "",
+        onEmailChange = {},
+        emailError = "",
+        password = "",
+        onPasswordChange = {},
+        passwordError = "",
+        passwordVisible = false,
+        onTogglePasswordVisibility = {},
+        isLoading = false,
+        onLoginClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginHeaderPreview(){
+    LoginHeader()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ToRegisterPreview(){
+    ToRegister()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DividerPreview(){
+    Divider()
+}

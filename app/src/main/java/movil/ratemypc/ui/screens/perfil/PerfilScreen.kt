@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterHeader
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.Avatar
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.BuildCard
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.InfoPerfil
@@ -22,6 +23,13 @@ import movil.ratemypc.ui.screens.perfil.PerfilComponents.TabPerfil
 
 @Composable
 fun PerfilScreen() {
+
+    PerfilScreenContent()
+}
+
+@Composable
+fun PerfilScreenContent(){
+
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     LazyColumn(
@@ -112,4 +120,46 @@ fun PerfilScreen() {
 @Composable
 fun PerfilScreenComposable() {
     PerfilScreen()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AvatarPreview(){
+    Avatar()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BuildCardPreview(){
+    BuildCard(
+        title = "",
+        imageUrl = "",
+        likes = "",
+        componentsCount = "",
+        rating = ""
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun InfoPerfilPreview(){
+    InfoPerfil(
+        username = "",
+        bio = "",
+        buildsCount = "",
+        reviewsCount = "",
+        likesCount = "",
+        followersCount = "",
+        followingCount = "",
+        onFollowClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TabPerfilPreview(){
+    TabPerfil(
+        selectedTabIndex = 0,
+        onTabSelected = {}
+    )
 }

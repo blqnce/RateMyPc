@@ -2,6 +2,7 @@ package movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,11 +27,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import movil.ratemypc.R
 
 @Composable
 fun LoginForm(
@@ -47,100 +50,103 @@ fun LoginForm(
 ) {
     val focusManager = LocalFocusManager.current
 
-    // ── Email ─────────────────────────────────────────────────
-    OutlinedTextField(
-        value         = email,
-        onValueChange = onEmailChange,
-        label         = { Text("Correo electrónico") },
-        leadingIcon   = { Icon(Icons.Outlined.Email, contentDescription = null) },
-        isError       = emailError != null,
-        supportingText = emailError?.let { { Text(it) } },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
-            imeAction    = ImeAction.Next
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        ),
-        singleLine = true,
-        modifier   = Modifier.fillMaxWidth(),
-        shape      = MaterialTheme.shapes.small
-    )
+    Column(modifier = Modifier) {
+        // ── Email ─────────────────────────────────────────────────
+        OutlinedTextField(
+            value         = email,
+            onValueChange = onEmailChange,
+            label         = { Text("Correo electrónico") },
+            leadingIcon   = { Icon(Icons.Outlined.Email, contentDescription = null) },
+            isError       = emailError != null,
+            supportingText = emailError?.let { { Text(it) } },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction    = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            ),
+            singleLine = true,
+            modifier   = Modifier.fillMaxWidth(),
+            shape      = MaterialTheme.shapes.small
+        )
 
-    Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(12.dp))
 
-    // ── Contraseña ────────────────────────────────────────────
-    OutlinedTextField(
-        value         = password,
-        onValueChange = onPasswordChange,
-        label         = { Text("Contraseña") },
-        leadingIcon   = { Icon(Icons.Outlined.Lock, contentDescription = null) },
-        trailingIcon  = {
-            IconButton(onClick = onTogglePasswordVisibility) {
-                Icon(
-                    imageVector = if (passwordVisible) Icons.Outlined.VisibilityOff
-                    else Icons.Outlined.Visibility,
-                    contentDescription = if (passwordVisible) "Ocultar" else "Mostrar"
-                )
-            }
-        },
-        visualTransformation = if (passwordVisible) VisualTransformation.None
-        else PasswordVisualTransformation(),
-        isError        = passwordError != null,
-        supportingText = passwordError?.let { { Text(it) } },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction    = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { focusManager.clearFocus(); onLoginClick() }
-        ),
-        singleLine = true,
-        modifier   = Modifier.fillMaxWidth(),
-        shape      = MaterialTheme.shapes.small
-    )
-
-    Box(modifier = Modifier.fillMaxWidth()) {
-        TextButton(
-            onClick  = {
-                // Recuperar contraseña
+        // ── Contraseña ────────────────────────────────────────────
+        OutlinedTextField(
+            value         = password,
+            onValueChange = onPasswordChange,
+            label         = { Text("Contraseña") },
+            leadingIcon   = { Icon(Icons.Outlined.Lock, contentDescription = null) },
+            trailingIcon  = {
+                IconButton(onClick = onTogglePasswordVisibility) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Outlined.VisibilityOff
+                        else Icons.Outlined.Visibility,
+                        contentDescription = if (passwordVisible) "Ocultar" else "Mostrar"
+                    )
+                }
             },
-            modifier = Modifier.align(Alignment.CenterEnd)
-        ) {
-            Text(
-                text  = "¿Olvidaste tu contraseña?",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
+            visualTransformation = if (passwordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
+            isError        = passwordError != null,
+            supportingText = passwordError?.let { { Text(it) } },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction    = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus(); onLoginClick() }
+            ),
+            singleLine = true,
+            modifier   = Modifier.fillMaxWidth(),
+            shape      = MaterialTheme.shapes.small
+        )
 
-    Spacer(Modifier.height(24.dp))
-
-    Button(
-        onClick  = onLoginClick,
-        enabled  = !isLoading,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp),
-        shape = MaterialTheme.shapes.small
-    ) {
-        AnimatedContent(
-            targetState = isLoading,
-            label       = "login_button"
-        ) { loading ->
-            if (loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(22.dp),
-                    color    = MaterialTheme.colorScheme.onPrimary,
-                    strokeWidth = 2.dp
-                )
-            } else {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            TextButton(
+                onClick  = {
+                    // Recuperar contraseña
+                },
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
                 Text(
-                    text  = "Ingresar",
-                    style = MaterialTheme.typography.titleMedium
+                    text  = stringResource(R.string.olvidaste_tu_contrase_a),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
+
+        Spacer(Modifier.height(24.dp))
+
+        Button(
+            onClick  = onLoginClick,
+            enabled  = !isLoading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            shape = MaterialTheme.shapes.small
+        ) {
+            AnimatedContent(
+                targetState = isLoading,
+                label       = "login_button"
+            ) { loading ->
+                if (loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(22.dp),
+                        color    = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text  = stringResource(R.string.ingresar),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
+        }
     }
+
 }

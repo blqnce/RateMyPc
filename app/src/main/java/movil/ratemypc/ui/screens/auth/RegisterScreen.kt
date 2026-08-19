@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import movil.ratemypc.ui.screens.auth.AuthComponents.Divider
+import movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents.LoginHeader
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterForm
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterHeader
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.ToLogin
@@ -126,4 +127,49 @@ fun RegisterScreenContent(
 @Composable
 fun RegisterScreenComposable(){
     RegisterScreen(onRegistered = {}, onBack = {})
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterHeaderPreview(){
+    RegisterHeader()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterFormPreview(){
+    RegisterForm(
+        name = "",
+        onNameChange = {},
+        nameError = "",
+        email = "",
+        onEmailChange = {},
+        emailError = "",
+        password = "",
+        onPasswordChange = {},
+        passwordError = "",
+        passwordVisible = false,
+        onTogglePasswordVisibility = {},
+        confirmPassword = "",
+        onConfirmPasswordChange = {},
+        confirmError = "",
+        confirmVisible = true,
+        onToggleConfirmVisibility = {},
+        isLoading = false,
+        onRegisterClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ToLoginPreview(){
+    ToLogin(
+        onLoginClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DividerPreview2(){
+    Divider()
 }

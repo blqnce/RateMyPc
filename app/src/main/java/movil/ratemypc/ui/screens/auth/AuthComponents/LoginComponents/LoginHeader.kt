@@ -3,6 +3,7 @@ package movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -22,28 +23,36 @@ import movil.ratemypc.R
 
 @Composable
 fun LoginHeader(){
-    Spacer(Modifier.height(72.dp))
-    Box(
-        modifier = Modifier
-            .size(100.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer),
-        contentAlignment = Alignment.Center
+
+    Column(modifier = Modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "App Logo",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+        Spacer(Modifier.height(72.dp))
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "App Logo",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // ── Header ───────────────────────────────────────────────
+        Text(
+            text  = stringResource(R.string.ratemypc),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 
-    Spacer(Modifier.height(24.dp))
 
-    // ── Header ───────────────────────────────────────────────
-    Text(
-        text  = stringResource(R.string.ratemypc),
-        style = MaterialTheme.typography.displaySmall,
-        color = MaterialTheme.colorScheme.primary
-    )
 }
