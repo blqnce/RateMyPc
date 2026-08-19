@@ -25,6 +25,12 @@ val bottomNavItems = listOf(
         unselectedIcon = Icons.Outlined.Home
     ),
     BottomNavItem(
+        label         = "Favoritos",
+        route         = Screen.Favoritos.route,
+        selectedIcon  = Icons.Filled.Bookmark,
+        unselectedIcon = Icons.Outlined.BookmarkBorder
+    ),
+    BottomNavItem(
         label         = "Perfil",
         route         = Screen.Perfil.route,
         selectedIcon  = Icons.Filled.Person,

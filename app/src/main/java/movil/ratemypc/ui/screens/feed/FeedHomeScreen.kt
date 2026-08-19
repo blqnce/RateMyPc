@@ -41,14 +41,12 @@ fun FeedHomeScreen(
         matchesCategory && matchesSearch
     }
 
-    Scaffold { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding),
-            contentPadding = PaddingValues(bottom = 100.dp)
-        ) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentPadding = PaddingValues(bottom = 100.dp)
+    ) {
 
             item {
                 Column(modifier = Modifier.padding(horizontal = 20.dp)) {
@@ -115,7 +113,6 @@ fun FeedHomeScreen(
                     NotFound()
                 }
             }
-        }
     }
 }
 

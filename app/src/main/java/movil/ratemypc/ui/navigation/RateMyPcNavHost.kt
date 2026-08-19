@@ -10,6 +10,8 @@ import movil.ratemypc.ui.navigation.Screen
 import movil.ratemypc.ui.screens.auth.LoginScreen
 import movil.ratemypc.ui.screens.auth.RegisterScreen
 import movil.ratemypc.ui.screens.feed.FeedHomeScreen
+import movil.ratemypc.ui.screens.favoritos.FavoritosScreen
+import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadScreen
 import movil.ratemypc.ui.screens.perfil.PerfilScreen
 import movil.ratemypc.viewmodel.ComponenteViewModel
 
@@ -48,6 +50,19 @@ fun RateMyPcNavHost(
                 viewModel        = ComponenteViewModel,
                 // Añadir pantalla de un componente especifico
             )
+        }
+
+        composable(Screen.Favoritos.route) {
+            FavoritosScreen(
+                viewModel = ComponenteViewModel,
+                onOpenCompatibility = {
+                    navController.navigate(Screen.Compatibilidad.route)
+                }
+            )
+        }
+
+        composable(Screen.Compatibilidad.route) {
+            CompatibilidadScreen(viewModel = ComponenteViewModel)
         }
 
 

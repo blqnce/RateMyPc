@@ -8,6 +8,8 @@ sealed class Screen(val route: String) {
 
     // Feed
     object FeedHome : Screen("feed")
+    object Favoritos : Screen("favoritos")
+    object Compatibilidad : Screen("compatibilidad")
 
     // Perfil
     object Perfil  : Screen("perfil")

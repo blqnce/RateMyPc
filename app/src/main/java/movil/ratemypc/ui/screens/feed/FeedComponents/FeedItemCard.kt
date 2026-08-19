@@ -2,7 +2,6 @@ package movil.ratemypc.ui.screens.feed.FeedComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -51,13 +49,11 @@ fun FeedItemCard(
     modifier: Modifier = Modifier
 ) {
 
-    // Modo oscuro de las cards
-    val isDark = isSystemInDarkTheme()
-    val containerColor = if (isDark) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-    val textColor = if (isDark) Color.Black else MaterialTheme.colorScheme.onSurface
-    val secondaryTextColor = if (isDark) Color(0xFF444444) else MaterialTheme.colorScheme.onSurfaceVariant
-    val buttonBg = if (isDark) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant
-    val buttonIconTint = if (isDark) Color.White else textColor
+    val containerColor = MaterialTheme.colorScheme.surfaceVariant
+    val textColor = MaterialTheme.colorScheme.onSurface
+    val secondaryTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val buttonBg = MaterialTheme.colorScheme.surface
+    val buttonIconTint = MaterialTheme.colorScheme.onSurface
 
     Card(
         modifier = modifier
@@ -125,8 +121,8 @@ fun FeedItemCard(
                     )
 
                     val badgeColor = when (item.subCategoria.uppercase()) {
-                        "GPU" -> Color(0xFF9C27B0) // Púrpura
-                        "CPU" -> Color(0xFFE65100) // Naranja
+                        "GPU" -> MaterialTheme.colorScheme.secondary
+                        "CPU" -> MaterialTheme.colorScheme.tertiary
                         else -> MaterialTheme.colorScheme.secondary
                     }
                     Surface(
@@ -140,7 +136,11 @@ fun FeedItemCard(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = androidx.compose.ui.unit.TextUnit.Unspecified // Mantener tamaño por defecto o ajustar
                             ),
-                            color = Color.White,
+                            color = if (item.subCategoria.equals("CPU", ignoreCase = true)) {
+                                MaterialTheme.colorScheme.onTertiary
+                            } else {
+                                MaterialTheme.colorScheme.onSecondary
+                            },
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
@@ -180,7 +180,7 @@ fun FeedItemCard(
                                     imageVector = if (isFilled) Icons.Filled.Star else Icons.Outlined.Star,
                                     contentDescription = null,
                                     modifier = Modifier.size(12.dp),
-                                    tint = if (isFilled) (if (isDark) Color(0xFF00BCD4) else MaterialTheme.colorScheme.primary) else MaterialTheme.colorScheme.outline
+                                    tint = if (isFilled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                                 )
                             }
                             Spacer(Modifier.width(4.dp))
