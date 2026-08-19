@@ -139,7 +139,6 @@ fun BuildCardPreview(){
         rating = ""
     )
 }
-
 @Preview(showBackground = true)
 @Composable
 fun InfoPerfilPreview(){
