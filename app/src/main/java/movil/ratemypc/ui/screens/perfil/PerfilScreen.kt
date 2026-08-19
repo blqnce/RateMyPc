@@ -22,13 +22,17 @@ import movil.ratemypc.ui.screens.perfil.PerfilComponents.InfoPerfil
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.TabPerfil
 
 @Composable
-fun PerfilScreen() {
+fun PerfilScreen(
+    onOpenSettings: () -> Unit = {}
+) {
 
-    PerfilScreenContent()
+    PerfilScreenContent(onOpenSettings = onOpenSettings)
 }
 
 @Composable
-fun PerfilScreenContent(){
+fun PerfilScreenContent(
+    onOpenSettings: () -> Unit = {}
+){
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -55,7 +59,7 @@ fun PerfilScreenContent(){
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 IconButton(
-                    onClick = { /* Settings */ },
+                    onClick = onOpenSettings,
                     modifier = Modifier
                         .size(40.dp)
                 ) {
