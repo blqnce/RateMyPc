@@ -16,19 +16,62 @@ import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.Register
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.ToLogin
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(
+    onRegistered: () -> Unit,
+    onBack: () -> Unit
+) {
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        RegisterScreenContent()
+        RegisterScreenContent(
+            onRegistered = onRegistered,
+            onBack       = onBack
+        )
     }
 }
 
 @Composable
-fun RegisterScreenContent(){
+fun RegisterScreenContent(
+    onRegistered: () -> Unit,
+    onBack: () -> Unit
+){
+
+    var name              by remember { mutableStateOf("") }
+    var email             by remember { mutableStateOf("") }
+    var password          by remember { mutableStateOf("") }
+    var confirmPassword   by remember { mutableStateOf("") }
+    var passwordVisible   by remember { mutableStateOf(false) }
+    var confirmVisible    by remember { mutableStateOf(false) }
+    var isLoading         by remember { mutableStateOf(false) }
+
+    var nameError         by remember { mutableStateOf<String?>(null) }
+    var emailError        by remember { mutableStateOf<String?>(null) }
+    var passwordError     by remember { mutableStateOf<String?>(null) }
+    var confirmError      by remember { mutableStateOf<String?>(null) }
+
+    fun validate(): Boolean {
+        nameError     = if (name.isBlank()) "Ingresa tu nombre" else null
+        emailError    = if (email.isBlank() || !email.contains("@")) "Ingresa un correo válido" else null
+        passwordError = when {
+            password.length < 6                -> "Mínimo 6 caracteres"
+            !password.any { it.isDigit() }     -> "Debe contener al menos un número"
+            !password.any { it.isUpperCase() } -> "Debe contener al menos una mayúscula"
+            else                               -> null
+        }
+        confirmError = if (confirmPassword != password) "Las contraseñas no coinciden" else null
+        return listOf(nameError, emailError, passwordError, confirmError).all { it == null }
+    }
+
+    fun onRegisterClick() {
+        if (!validate()) return
+        isLoading = true
+        // Simular registro
+        isLoading = false
+        onRegistered()
+    }
 
     val scrollState  = rememberScrollState()
 
@@ -45,7 +88,26 @@ fun RegisterScreenContent(){
 
         Spacer(Modifier.height(32.dp))
 
-        RegisterForm()
+        RegisterForm(
+            name = name,
+            onNameChange = { name = it; nameError = null },
+            nameError = nameError,
+            email = email,
+            onEmailChange = { email = it; emailError = null },
+            emailError = emailError,
+            password = password,
+            onPasswordChange = { password = it; passwordError = null },
+            passwordError = passwordError,
+            passwordVisible = passwordVisible,
+            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
+            confirmPassword = confirmPassword,
+            onConfirmPasswordChange = { confirmPassword = it; confirmError = null },
+            confirmError = confirmError,
+            confirmVisible = confirmVisible,
+            onToggleConfirmVisibility = { confirmVisible = !confirmVisible },
+            isLoading = isLoading,
+            onRegisterClick = { onRegisterClick() }
+        )
 
         Spacer(Modifier.height(24.dp))
 
@@ -54,7 +116,7 @@ fun RegisterScreenContent(){
         Spacer(Modifier.height(32.dp))
 
         // ── Ir a login ────────────────────────────────────────────
-        ToLogin()
+        ToLogin(onLoginClick = onBack)
 
         Spacer(Modifier.height(32.dp))
     }
@@ -63,5 +125,5 @@ fun RegisterScreenContent(){
 @Preview
 @Composable
 fun RegisterScreenComposable(){
-    RegisterScreen()
+    RegisterScreen(onRegistered = {}, onBack = {})
 }

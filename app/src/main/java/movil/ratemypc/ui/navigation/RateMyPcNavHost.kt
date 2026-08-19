@@ -35,7 +35,12 @@ fun RateMyPcNavHost(
         }
 
         composable(Screen.Register.route) {
-            RegisterScreen()
+            RegisterScreen(
+                onRegistered = { navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                }},
+                onBack = { navController.popBackStack() }
+            )
         }
 
         composable(Screen.FeedHome.route) {

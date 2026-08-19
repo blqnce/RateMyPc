@@ -17,7 +17,7 @@ import movil.ratemypc.R
 @Composable
 fun BoxScope.EditarPerfil(){
     OutlinedButton(
-        onClick = { /* Edit */ },
+        onClick = { },
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(bottom = 8.dp, end = 16.dp),

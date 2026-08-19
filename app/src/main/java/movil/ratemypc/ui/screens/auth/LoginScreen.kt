@@ -30,6 +30,24 @@ fun LoginScreen() {
 @Composable
 fun LoginScreenContent(){
 
+    var email           by remember { mutableStateOf("") }
+    var password        by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var isLoading       by remember { mutableStateOf(false) }
+    var emailError      by remember { mutableStateOf<String?>(null) }
+    var passwordError   by remember { mutableStateOf<String?>(null) }
+
+    fun validate(): Boolean {
+        emailError    = if (email.isBlank() || !email.contains("@")) "Ingresa un correo válido" else null
+        passwordError = if (password.length < 6) "Mínimo 6 caracteres" else null
+        return emailError == null && passwordError == null
+    }
+
+    fun onLoginClick() {
+        if (!validate()) return
+        isLoading = true
+    }
+
     val scrollState  = rememberScrollState()
 
     Column(
@@ -43,7 +61,18 @@ fun LoginScreenContent(){
 
         Spacer(Modifier.height(48.dp))
 
-        LoginForm()
+        LoginForm(
+            email = email,
+            onEmailChange = { email = it; emailError = null },
+            emailError = emailError,
+            password = password,
+            onPasswordChange = { password = it; passwordError = null },
+            passwordError = passwordError,
+            passwordVisible = passwordVisible,
+            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
+            isLoading = isLoading,
+            onLoginClick = { onLoginClick() }
+        )
 
         Spacer(Modifier.height(24.dp))
 
@@ -62,6 +91,3 @@ fun LoginScreenContent(){
 fun LoginScreenComposable(){
     LoginScreen()
 }
-
-
-

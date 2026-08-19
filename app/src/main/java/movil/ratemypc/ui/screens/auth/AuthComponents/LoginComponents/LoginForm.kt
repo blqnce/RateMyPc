@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,10 +22,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -38,32 +33,24 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginForm(){
-
-    var email           by remember { mutableStateOf("") }
-    var password        by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var isLoading       by remember { mutableStateOf(false) }
-    var emailError      by remember { mutableStateOf<String?>(null) }
-    var passwordError   by remember { mutableStateOf<String?>(null) }
-
+fun LoginForm(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    emailError: String?,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordError: String?,
+    passwordVisible: Boolean,
+    onTogglePasswordVisibility: () -> Unit,
+    isLoading: Boolean,
+    onLoginClick: () -> Unit
+) {
     val focusManager = LocalFocusManager.current
-
-    fun validate(): Boolean {
-        emailError    = if (email.isBlank() || !email.contains("@")) "Ingresa un correo válido" else null
-        passwordError = if (password.length < 6) "Mínimo 6 caracteres" else null
-        return emailError == null && passwordError == null
-    }
-
-    fun onLoginClick() {
-        if (!validate()) return
-        isLoading = true
-    }
 
     // ── Email ─────────────────────────────────────────────────
     OutlinedTextField(
         value         = email,
-        onValueChange = { email = it; emailError = null },
+        onValueChange = onEmailChange,
         label         = { Text("Correo electrónico") },
         leadingIcon   = { Icon(Icons.Outlined.Email, contentDescription = null) },
         isError       = emailError != null,
@@ -85,11 +72,11 @@ fun LoginForm(){
     // ── Contraseña ────────────────────────────────────────────
     OutlinedTextField(
         value         = password,
-        onValueChange = { password = it; passwordError = null },
+        onValueChange = onPasswordChange,
         label         = { Text("Contraseña") },
         leadingIcon   = { Icon(Icons.Outlined.Lock, contentDescription = null) },
         trailingIcon  = {
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            IconButton(onClick = onTogglePasswordVisibility) {
                 Icon(
                     imageVector = if (passwordVisible) Icons.Outlined.VisibilityOff
                     else Icons.Outlined.Visibility,
@@ -131,7 +118,7 @@ fun LoginForm(){
     Spacer(Modifier.height(24.dp))
 
     Button(
-        onClick  = { onLoginClick() },
+        onClick  = onLoginClick,
         enabled  = !isLoading,
         modifier = Modifier
             .fillMaxWidth()
@@ -156,5 +143,4 @@ fun LoginForm(){
             }
         }
     }
-
 }

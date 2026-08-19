@@ -11,25 +11,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
 @Composable
-fun Buscador(){
-
-    var searchQuery by remember { mutableStateOf("") }
-
+fun Buscador(
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit
+){
     OutlinedTextField(
         value = searchQuery,
-        onValueChange = { searchQuery = it },
+        onValueChange = onSearchQueryChange,
         placeholder = { Text("Buscar componentes") },
         leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
         trailingIcon = {
             AnimatedVisibility(visible = searchQuery.isNotBlank()) {
-                IconButton(onClick = { searchQuery = "" }) {
+                IconButton(onClick = { onSearchQueryChange("") }) {
                     Icon(Icons.Outlined.Close, contentDescription = "Limpiar")
                 }
             }

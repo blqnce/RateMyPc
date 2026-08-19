@@ -11,7 +11,9 @@ import androidx.compose.ui.res.stringResource
 import movil.ratemypc.R
 
 @Composable
-fun ToLogin(){
+fun ToLogin(
+    onLoginClick: () -> Unit
+){
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment     = Alignment.CenterVertically
@@ -21,7 +23,7 @@ fun ToLogin(){
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        TextButton(onClick = {}) {
+        TextButton(onClick = onLoginClick) {
             Text(
                 text  = stringResource(R.string.inicia_sesi_n),
                 style = MaterialTheme.typography.bodyMedium,

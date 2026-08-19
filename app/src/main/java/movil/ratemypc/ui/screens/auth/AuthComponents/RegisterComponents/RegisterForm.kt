@@ -22,10 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -38,50 +34,31 @@ import androidx.compose.ui.unit.dp
 import movil.ratemypc.ui.screens.auth.AuthComponents.PasswordStrengthIndicator
 
 @Composable
-fun RegisterForm(){
-
-    var name              by remember { mutableStateOf("") }
-    var email             by remember { mutableStateOf("") }
-    var password          by remember { mutableStateOf("") }
-    var confirmPassword   by remember { mutableStateOf("") }
-    var passwordVisible   by remember { mutableStateOf(false) }
-    var confirmVisible    by remember { mutableStateOf(false) }
-    var isLoading         by remember { mutableStateOf(false) }
-
-    var nameError         by remember { mutableStateOf<String?>(null) }
-    var emailError        by remember { mutableStateOf<String?>(null) }
-    var passwordError     by remember { mutableStateOf<String?>(null) }
-    var confirmError      by remember { mutableStateOf<String?>(null) }
-
+fun RegisterForm(
+    name: String,
+    onNameChange: (String) -> Unit,
+    nameError: String?,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    emailError: String?,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordError: String?,
+    passwordVisible: Boolean,
+    onTogglePasswordVisibility: () -> Unit,
+    confirmPassword: String,
+    onConfirmPasswordChange: (String) -> Unit,
+    confirmError: String?,
+    confirmVisible: Boolean,
+    onToggleConfirmVisibility: () -> Unit,
+    isLoading: Boolean,
+    onRegisterClick: () -> Unit
+) {
     val focusManager = LocalFocusManager.current
-
-    fun validate(): Boolean {
-        nameError     = if (name.isBlank()) "Ingresa tu nombre" else null
-        emailError    = if (email.isBlank() || !email.contains("@")) "Ingresa un correo válido" else null
-        passwordError = when {
-            password.length < 6                -> "Mínimo 6 caracteres"
-            !password.any { it.isDigit() }     -> "Debe contener al menos un número"
-            !password.any { it.isUpperCase() } -> "Debe contener al menos una mayúscula"
-            else                               -> null
-        }
-        confirmError = if (confirmPassword != password) "Las contraseñas no coinciden" else null
-        return listOf(nameError, emailError, passwordError, confirmError).all { it == null }
-    }
-
-    fun onRegisterClick() {
-        if (!validate()) return
-
-        // Llamar al viewmodel para registrar al usuario
-
-        isLoading = false
-        //onRegistered()
-    }
-
-
 
     OutlinedTextField(
         value         = name,
-        onValueChange = { name = it; nameError = null },
+        onValueChange = onNameChange,
         label         = { Text("Nombre completo") },
         leadingIcon   = { Icon(Icons.Outlined.Person, contentDescription = null) },
         isError       = nameError != null,
@@ -104,7 +81,7 @@ fun RegisterForm(){
     // ── Email ─────────────────────────────────────────────────
     OutlinedTextField(
         value         = email,
-        onValueChange = { email = it; emailError = null },
+        onValueChange = onEmailChange,
         label         = { Text("Correo electrónico") },
         leadingIcon   = { Icon(Icons.Outlined.Email, contentDescription = null) },
         isError       = emailError != null,
@@ -126,11 +103,11 @@ fun RegisterForm(){
     // ── Contraseña ────────────────────────────────────────────
     OutlinedTextField(
         value         = password,
-        onValueChange = { password = it; passwordError = null },
+        onValueChange = onPasswordChange,
         label         = { Text("Contraseña") },
         leadingIcon   = { Icon(Icons.Outlined.Lock, contentDescription = null) },
         trailingIcon  = {
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            IconButton(onClick = onTogglePasswordVisibility) {
                 Icon(
                     imageVector        = if (passwordVisible) Icons.Outlined.VisibilityOff
                     else Icons.Outlined.Visibility,
@@ -165,11 +142,11 @@ fun RegisterForm(){
     // ── Confirmar contraseña ──────────────────────────────────
     OutlinedTextField(
         value         = confirmPassword,
-        onValueChange = { confirmPassword = it; confirmError = null },
+        onValueChange = onConfirmPasswordChange,
         label         = { Text("Confirmar contraseña") },
         leadingIcon   = { Icon(Icons.Outlined.LockOpen, contentDescription = null) },
         trailingIcon  = {
-            IconButton(onClick = { confirmVisible = !confirmVisible }) {
+            IconButton(onClick = onToggleConfirmVisibility) {
                 Icon(
                     imageVector        = if (confirmVisible) Icons.Outlined.VisibilityOff
                     else Icons.Outlined.Visibility,
@@ -197,7 +174,7 @@ fun RegisterForm(){
 
     // ── Botón principal ───────────────────────────────────────
     Button(
-        onClick  = { onRegisterClick() },
+        onClick  = onRegisterClick,
         enabled  = !isLoading,
         modifier = Modifier
             .fillMaxWidth()
@@ -222,6 +199,4 @@ fun RegisterForm(){
             }
         }
     }
-
-
 }
