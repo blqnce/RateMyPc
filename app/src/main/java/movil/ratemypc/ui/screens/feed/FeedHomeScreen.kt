@@ -72,6 +72,7 @@ fun FeedHomeScreen(
                 .padding(innerPadding),
             contentPadding = PaddingValues(bottom = 100.dp)
         ) {
+
             item {
                 Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                     Spacer(Modifier.height(16.dp))
