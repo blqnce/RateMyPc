@@ -31,21 +31,11 @@ fun RateMyPcNavHost(
         modifier         = modifier
     ) {
         composable(Screen.Login.route) {
-            LoginScreen(
-                onLoginSuccess  = { navController.navigate(Screen.FeedHome.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }},
-                onGoToRegister  = { navController.navigate(Screen.Register.route) }
-            )
+            LoginScreen()
         }
 
         composable(Screen.Register.route) {
-            RegisterScreen(
-                onRegistered = { navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }},
-                onBack = { navController.popBackStack() }
-            )
+            RegisterScreen()
         }
 
         composable(Screen.FeedHome.route) {
@@ -57,13 +47,7 @@ fun RateMyPcNavHost(
 
 
         composable(Screen.Perfil.route) {
-            PerfilScreen(
-                /*
-                Añadir pantalla de configuracion
-                onSettingsClick = { navController.navigate(Screen.Configuracion.route) }
-
-                 */
-            )
+            PerfilScreen()
         }
 
     }
