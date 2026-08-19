@@ -155,6 +155,7 @@ fun InfoPerfilPreview(){
     )
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun TabPerfilPreview(){
