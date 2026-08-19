@@ -13,6 +13,7 @@ import movil.ratemypc.ui.screens.feed.FeedHomeScreen
 import movil.ratemypc.ui.screens.favoritos.FavoritosScreen
 import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadScreen
 import movil.ratemypc.ui.screens.perfil.PerfilScreen
+import movil.ratemypc.ui.screens.settings.SettingsScreen
 import movil.ratemypc.viewmodel.ComponenteViewModel
 
 @Composable
@@ -66,7 +67,15 @@ fun RateMyPcNavHost(
 
 
         composable(Screen.Perfil.route) {
-            PerfilScreen()
+            PerfilScreen(
+                onOpenSettings = { navController.navigate(Screen.Settings.route) }
+            )
+        }
+
+        composable(Screen.Settings.route) {
+            SettingsScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
 
     }
