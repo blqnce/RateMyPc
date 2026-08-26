@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
@@ -43,7 +45,8 @@ import movil.ratemypc.viewmodel.ComponenteViewModel
 @Composable
 fun CompatibilidadScreen(
     viewModel: ComponenteViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
     val componentes by viewModel.componentes.collectAsState()
     var analyzed by remember { mutableStateOf(false) }
@@ -65,7 +68,8 @@ fun CompatibilidadScreen(
         totalCost = totalCost,
         selectedComponents = selectedComponents,
         selectedCategories = selectedCategories,
-        requiredCategories = requiredCategories
+        requiredCategories = requiredCategories,
+        onBack = onBack
     )
 }
 
@@ -80,7 +84,8 @@ fun CompatibilidadScreenContent(
     totalCost: Double,
     selectedComponents: List<movil.ratemypc.data.Componente>,
     selectedCategories: Set<String>,
-    requiredCategories: List<String>
+    requiredCategories: List<String>,
+    onBack: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -90,6 +95,15 @@ fun CompatibilidadScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
             Text(
                 text = "Compatibilidad",
                 style = MaterialTheme.typography.headlineSmall,
@@ -213,6 +227,6 @@ fun CompatibilidadScreenContent(
 @Composable
 fun CompatibilidadScreenPreview() {
     RateMyPcTheme {
-        CompatibilidadScreen()
+        CompatibilidadScreen(onBack = {})
     }
 }

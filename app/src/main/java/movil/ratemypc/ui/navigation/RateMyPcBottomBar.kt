@@ -31,6 +31,12 @@ val bottomNavItems = listOf(
         unselectedIcon = Icons.Outlined.BookmarkBorder
     ),
     BottomNavItem(
+        label         = "Notificaciones",
+        route         = Screen.Notifications.route,
+        selectedIcon  = Icons.Filled.Notifications,
+        unselectedIcon = Icons.Outlined.Notifications
+    ),
+    BottomNavItem(
         label         = "Perfil",
         route         = Screen.Perfil.route,
         selectedIcon  = Icons.Filled.Person,

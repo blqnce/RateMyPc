@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import movil.ratemypc.ui.navigation.RateMyPcBottomBar
+import movil.ratemypc.ui.navigation.RateMyPcNavHost
 import movil.ratemypc.ui.navigation.Screen
-import movil.ratemypc.ui.screens.RateMyPcNavHost
 import movil.ratemypc.ui.theme.RateMyPcTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
                 val showBottomBar = currentRoute in listOf(
                     Screen.FeedHome.route,
                     Screen.Favoritos.route,
+                    Screen.Notifications.route,
                     Screen.Perfil.route
                 )
 

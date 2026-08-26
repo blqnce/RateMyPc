@@ -35,15 +35,15 @@
     <string name="shop_newegg">Newegg</string>
     <string name="shop_micro_center">Micro Center</string>
     <string name="shop_bh">B&amp;H</string>
-    <string name="notifications_title">Notifications</string>
-    <string name="notifications_mark_all_read">Mark all read</string>
-    <string name="notifications_filter_all">All</string>
-    <string name="notifications_filter_follows">Follows</string>
-    <string name="notifications_filter_comments">Comments</string>
-    <string name="notifications_filter_likes">Likes</string>
-    <string name="notifications_type_follow">New follower</string>
-    <string name="notifications_type_comment">New comment</string>
-    <string name="notifications_type_like">New like</string>
-    <string name="notifications_empty_title">No notifications</string>
-    <string name="notifications_empty_message">You are all caught up</string>
+    <string name="notifications_title">Notificaciones</string>
+    <string name="notifications_mark_all_read">Marcar todo como leído</string>
+    <string name="notifications_filter_all">Todas</string>
+    <string name="notifications_filter_follows">Seguidores</string>
+    <string name="notifications_filter_comments">Comentarios</string>
+    <string name="notifications_filter_likes">Me gusta</string>
+    <string name="notifications_type_follow">Nuevo seguidor</string>
+    <string name="notifications_type_comment">Nuevo comentario</string>
+    <string name="notifications_type_like">Nuevo me gusta</string>
+    <string name="notifications_empty_title">Sin notificaciones</string>
+    <string name="notifications_empty_message">Estás al día con todo</string>
 </resources>

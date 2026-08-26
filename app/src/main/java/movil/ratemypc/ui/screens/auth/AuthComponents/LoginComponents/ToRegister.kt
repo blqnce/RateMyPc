@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import movil.ratemypc.R
 
 @Composable
-fun ToRegister(){
+fun ToRegister(onRegisterClick: () -> Unit){
     // ── Ir a registro ─────────────────────────────────────────
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -22,7 +22,7 @@ fun ToRegister(){
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        TextButton(onClick = {}) {
+        TextButton(onClick = onRegisterClick) {
             Text(
                 text  = stringResource(R.string.reg_strate),
                 style = MaterialTheme.typography.bodyMedium,

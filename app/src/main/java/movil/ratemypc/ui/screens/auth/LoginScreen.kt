@@ -18,7 +18,10 @@ import movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents.LoginHeader
 import movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents.ToRegister
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onGoToRegister: () -> Unit
+) {
     var email           by remember { mutableStateOf("") }
     var password        by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -35,6 +38,9 @@ fun LoginScreen() {
     fun onLoginClick() {
         if (!validate()) return
         isLoading = true
+        // Simulación:
+        isLoading = false
+        onLoginSuccess()
     }
 
     val scrollState  = rememberScrollState()
@@ -55,6 +61,7 @@ fun LoginScreen() {
             onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
             isLoading = isLoading,
             onLoginClick = { onLoginClick() },
+            onGoToRegister = onGoToRegister,
             scrollState = scrollState
         )
     }
@@ -72,6 +79,7 @@ fun LoginScreenContent(
     onTogglePasswordVisibility: () -> Unit,
     isLoading: Boolean,
     onLoginClick: () -> Unit,
+    onGoToRegister: () -> Unit,
     scrollState: ScrollState
 ){
     Column(
@@ -104,7 +112,7 @@ fun LoginScreenContent(
 
         Spacer(Modifier.height(32.dp))
 
-        ToRegister()
+        ToRegister(onRegisterClick = onGoToRegister)
 
         Spacer(Modifier.height(32.dp))
     }
@@ -113,40 +121,5 @@ fun LoginScreenContent(
 @Preview
 @Composable
 fun LoginScreenComposable(){
-    LoginScreen()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginFormPreview(){
-    LoginForm(
-        email = "",
-        onEmailChange = {},
-        emailError = "",
-        password = "",
-        onPasswordChange = {},
-        passwordError = "",
-        passwordVisible = false,
-        onTogglePasswordVisibility = {},
-        isLoading = false,
-        onLoginClick = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginHeaderPreview(){
-    LoginHeader()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ToRegisterPreview(){
-    ToRegister()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DividerPreview(){
-    Divider()
+    LoginScreen(onLoginSuccess = {}, onGoToRegister = {})
 }

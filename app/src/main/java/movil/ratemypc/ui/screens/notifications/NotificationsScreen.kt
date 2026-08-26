@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import movil.ratemypc.data.NotificationFilter
 import movil.ratemypc.data.NotificationItem
 import movil.ratemypc.data.NotificationType
@@ -30,7 +32,8 @@ import movil.ratemypc.viewmodel.NotificationViewModel
 @Composable
 fun NotificationsScreen(
     modifier: Modifier = Modifier,
-    viewModel: NotificationViewModel = viewModel()
+    viewModel: NotificationViewModel = viewModel(),
+    navController: NavController
 ) {
     val notifications by viewModel.notifications.collectAsState()
     val selectedFilter by viewModel.selectedFilter.collectAsState()
@@ -102,13 +105,6 @@ fun NotificationsScreenContent(
 @Composable
 fun NotificationsScreenPreview() {
     RateMyPcTheme {
-        NotificationsScreenContent(
-            notifications = LocalNotificationsProvider.notifications,
-            unreadCount = LocalNotificationsProvider.notifications.count { !it.isRead },
-            selectedFilter = NotificationFilter.ALL,
-            onFilterChange = {},
-            onMarkAllRead = {},
-            onNotificationClick = {}
-        )
+        NotificationsScreen(navController = rememberNavController())
     }
 }

@@ -46,6 +46,7 @@ import movil.ratemypc.data.Componente
 fun FeedItemCard(
     item: Componente,
     onClick: () -> Unit,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -198,9 +199,7 @@ fun FeedItemCard(
                     ) {
                         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
                             IconButton(
-                                onClick = {
-                                    // Navegar a la pantalla de informacion
-                                },
+                                onClick = onInfoClick,
                                 modifier = Modifier
                                     .size(32.dp)
                                     .background(buttonBg, CircleShape)

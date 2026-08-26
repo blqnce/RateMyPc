@@ -24,7 +24,9 @@ import movil.ratemypc.viewmodel.ComponenteViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedHomeScreen(
-    viewModel: ComponenteViewModel = viewModel()
+    viewModel: ComponenteViewModel = viewModel(),
+    onOpenReview: (String) -> Unit = {},
+    onOpenDetail: (String) -> Unit = {}
 ) {
     var selectedCategory by remember { mutableStateOf("Todo") }
     var searchQuery by remember { mutableStateOf("") }
@@ -48,7 +50,9 @@ fun FeedHomeScreen(
         searchQuery = searchQuery,
         onSearchQueryChange = { searchQuery = it },
         dynamicCategories = dynamicCategories,
-        filtered = filtered
+        filtered = filtered,
+        onOpenReview = onOpenReview,
+        onOpenDetail = onOpenDetail
     )
 }
 
@@ -59,7 +63,9 @@ fun FeedhomeScreenContent(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     dynamicCategories: List<String>,
-    filtered: List<Componente>
+    filtered: List<Componente>,
+    onOpenReview: (String) -> Unit = {},
+    onOpenDetail: (String) -> Unit = {}
 ){
     LazyColumn(
         modifier = Modifier
@@ -123,7 +129,10 @@ fun FeedhomeScreenContent(
             FeedItemCard(
                 item = item,
                 onClick = {
-                    // Navegar a la pantalla de detalle del componente
+                    onOpenReview(item.id)
+                },
+                onInfoClick = {
+                    onOpenDetail(item.id)
                 }
             )
         }
