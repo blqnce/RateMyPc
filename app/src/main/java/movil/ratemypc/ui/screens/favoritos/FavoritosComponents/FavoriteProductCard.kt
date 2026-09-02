@@ -20,11 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import movil.ratemypc.data.Componente
+import movil.ratemypc.data.ComponenteItem
 
 @Composable
 fun FavoriteProductCard(
-    componente: Componente,
+    componente: ComponenteItem,
     modifier: Modifier = Modifier
 ) {
     Card(

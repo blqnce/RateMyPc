@@ -20,12 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import movil.ratemypc.data.Componente
+import movil.ratemypc.data.ComponenteItem
 
 @Composable
 fun CompatibilityDetails(
     missingCategories: List<String>,
-    selectedComponents: List<Componente>,
+    selectedComponents: List<ComponenteItem>,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {

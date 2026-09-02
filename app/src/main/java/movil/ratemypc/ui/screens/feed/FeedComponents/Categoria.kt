@@ -18,15 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import movil.ratemypc.viewmodel.ComponenteViewModel
+import movil.ratemypc.data.local.LocalComponentesProvider
 
 @Composable
 fun Categoria(
-    viewModel: ComponenteViewModel = viewModel()
 ){
 
-    val componentes by viewModel.componentes.collectAsState()
+    val componentes = remember { LocalComponentesProvider.componentes }
 
     var selectedCategory by remember { mutableStateOf("Todo") }
 

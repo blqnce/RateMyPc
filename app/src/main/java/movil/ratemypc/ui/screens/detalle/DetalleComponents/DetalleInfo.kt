@@ -11,10 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import movil.ratemypc.data.Componente
+import movil.ratemypc.data.ComponenteItem
 
 @Composable
-fun DetalleInfo(componente: Componente) {
+fun DetalleInfo(componente: ComponenteItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

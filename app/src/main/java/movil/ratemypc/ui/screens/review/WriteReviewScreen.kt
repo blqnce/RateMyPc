@@ -9,27 +9,30 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import movil.ratemypc.data.Componente
-import movil.ratemypc.ui.screens.review.ReviewComponents.ProductReviewSummaryCard
-import movil.ratemypc.ui.screens.review.ReviewComponents.RatingSelector
-import movil.ratemypc.ui.screens.review.ReviewComponents.ReviewImageUploader
-import movil.ratemypc.ui.screens.review.ReviewComponents.ReviewInputField
-import movil.ratemypc.ui.screens.review.ReviewComponents.ReviewSubmitButton
-import movil.ratemypc.ui.screens.review.ReviewComponents.ShopSelector
-import movil.ratemypc.ui.screens.review.ReviewComponents.WriteReviewHeader
+import movil.ratemypc.data.ComponenteItem
+import movil.ratemypc.ui.screens.review.ReviewComponents.*
 import movil.ratemypc.ui.theme.RateMyPcTheme
 
 @Composable
 fun WriteReviewScreen(
-    component: Componente = Componente(
+    componenteId: String? = null,
+    onBack: () -> Unit = {},
+    onSubmit: (String, Int, String, String?) -> Unit = { _, _, _, _ -> },
+    viewModel: WriteReviewViewModel
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(componenteId) {
+        componenteId?.let { viewModel.loadComponent(it) }
+    }
+
+    val finalComponent = uiState.component ?: ComponenteItem(
         id = "review-demo",
         nombre = "Tarjeta gráfica GeForce RTX 5060",
         imageUrl = "https://m.media-amazon.com/images/I/71ii5ow8slL._AC_SL1500_.jpg",
@@ -40,40 +43,30 @@ fun WriteReviewScreen(
         marca = "GYGABITE",
         promedioCalificacion = 4f,
         totalResenas = 20
-    ),
-    onBack: () -> Unit = {},
-    onSubmit: (String, Int, String, String?) -> Unit = { _, _, _, _ -> }
-) {
-    var rating by remember { mutableIntStateOf(0) }
-    var reviewText by remember { mutableStateOf("") }
-    var selectedShop by remember { mutableStateOf("Amazon") }
-    var imageUrl by remember { mutableStateOf<String?>(null) }
-
-    val shops = listOf("Amazon", "Newegg", "Micro Center", "B&H")
-    val isValid = rating > 0 && reviewText.isNotBlank() && selectedShop.isNotBlank()
+    )
 
     WriteReviewScreenContent(
-        component = component,
-        rating = rating,
-        onRatingChange = { rating = it },
-        reviewText = reviewText,
-        onReviewTextChange = { reviewText = it },
-        shops = shops,
-        selectedShop = selectedShop,
-        onShopChange = { selectedShop = it },
-        imageUrl = imageUrl,
-        onImageChange = { imageUrl = it },
+        component = finalComponent,
+        rating = uiState.rating,
+        onRatingChange = { viewModel.onRatingChange(it) },
+        reviewText = uiState.reviewText,
+        onReviewTextChange = { viewModel.onReviewTextChange(it) },
+        shops = uiState.shops,
+        selectedShop = uiState.selectedShop,
+        onShopChange = { viewModel.onShopChange(it) },
+        imageUrl = uiState.imageUrl,
+        onImageChange = { viewModel.onImageChange(it) },
         onBack = onBack,
         onSubmit = {
-            onSubmit(reviewText, rating, selectedShop, imageUrl)
+            onSubmit(uiState.reviewText, uiState.rating, uiState.selectedShop, uiState.imageUrl)
         },
-        isValid = isValid
+        isValid = uiState.isValid
     )
 }
 
 @Composable
 fun WriteReviewScreenContent(
-    component: Componente,
+    component: ComponenteItem,
     rating: Int,
     onRatingChange: (Int) -> Unit,
     reviewText: String,
@@ -119,6 +112,6 @@ fun WriteReviewScreenContent(
 @Composable
 fun WriteReviewScreenPreview() {
     RateMyPcTheme {
-        WriteReviewScreen()
+        WriteReviewScreen(viewModel = WriteReviewViewModel())
     }
 }

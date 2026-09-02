@@ -7,39 +7,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import movil.ratemypc.ui.screens.favoritos.FavoritosComponents.CompatibilityButton
-import movil.ratemypc.ui.screens.favoritos.FavoritosComponents.EmptyFavoriteTab
-import movil.ratemypc.ui.screens.favoritos.FavoritosComponents.FavoriteProductCard
-import movil.ratemypc.ui.screens.favoritos.FavoritosComponents.FavoritosHeader
-import movil.ratemypc.ui.screens.favoritos.FavoritosComponents.FavoritosTabSelector
-import movil.ratemypc.ui.theme.RateMyPcTheme
-import movil.ratemypc.viewmodel.ComponenteViewModel
+import movil.ratemypc.data.ComponenteItem
+import movil.ratemypc.ui.screens.favoritos.FavoritosComponents.*
 
 @Composable
 fun FavoritosScreen(
-    viewModel: ComponenteViewModel = viewModel(),
+    favoritosViewModel: FavoritosViewModel,
     onOpenCompatibility: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val componentes by viewModel.componentes.collectAsState()
-    var selectedTab by remember { mutableIntStateOf(0) }
-    val favoritos = componentes.take(2)
+    val uiState by favoritosViewModel.uiState.collectAsState()
 
     FavoritosScreenContent(
         modifier = modifier,
-        favoritos = favoritos,
-        selectedTab = selectedTab,
-        onTabSelected = { selectedTab = it },
+        favoritos = uiState.favoritos,
+        selectedTab = uiState.selectedTab,
+        onTabSelected = { favoritosViewModel.onTabSelected(it) },
         onOpenCompatibility = onOpenCompatibility
     )
 }
@@ -47,7 +34,7 @@ fun FavoritosScreen(
 @Composable
 fun FavoritosScreenContent(
     modifier: Modifier = Modifier,
-    favoritos: List<movil.ratemypc.data.Componente>,
+    favoritos: List<ComponenteItem>,
     selectedTab: Int,
     onTabSelected: (Int) -> Unit,
     onOpenCompatibility: () -> Unit
@@ -89,12 +76,10 @@ fun FavoritosScreenContent(
     }
 }
 
-
-
 @Composable
 @Preview(showBackground = true)
 fun FavoritosScreenPreview() {
-    RateMyPcTheme {
-        FavoritosScreen()
+    movil.ratemypc.ui.theme.RateMyPcTheme {
+        FavoritosScreen(favoritosViewModel = FavoritosViewModel())
     }
 }

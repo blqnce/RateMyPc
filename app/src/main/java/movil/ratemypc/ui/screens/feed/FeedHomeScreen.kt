@@ -11,48 +11,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import movil.ratemypc.data.Componente
-import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterHeader
-import movil.ratemypc.ui.screens.feed.FeedComponents.Buscador
-import movil.ratemypc.ui.screens.feed.FeedComponents.FeedHeader
-import movil.ratemypc.ui.screens.feed.FeedComponents.FeedItemCard
-import movil.ratemypc.ui.screens.feed.FeedComponents.MsgEncontrados
-import movil.ratemypc.ui.screens.feed.FeedComponents.NotFound
-import movil.ratemypc.viewmodel.ComponenteViewModel
+import movil.ratemypc.data.ComponenteItem
+import movil.ratemypc.ui.screens.feed.FeedComponents.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedHomeScreen(
-    viewModel: ComponenteViewModel = viewModel(),
+    feedHomeViewModel: FeedHomeViewModel,
     onOpenReview: (String) -> Unit = {},
     onOpenDetail: (String) -> Unit = {}
 ) {
-    var selectedCategory by remember { mutableStateOf("Todo") }
-    var searchQuery by remember { mutableStateOf("") }
-
-    val componentes by viewModel.componentes.collectAsState()
-
-    val dynamicCategories = remember(componentes) {
-        listOf("Todo") + componentes.map { it.subCategoria }.distinct().sorted()
-    }
-
-    val filtered = componentes.filter { componente ->
-        val matchesCategory = selectedCategory == "Todo" || componente.subCategoria == selectedCategory
-        val matchesSearch = searchQuery.isBlank() ||
-                componente.nombre.contains(searchQuery, ignoreCase = true)
-        matchesCategory && matchesSearch
-    }
+    val uiState by feedHomeViewModel.uiState.collectAsState()
 
     FeedhomeScreenContent(
-        selectedCategory = selectedCategory,
-        onCategoryChange = { selectedCategory = it },
-        searchQuery = searchQuery,
-        onSearchQueryChange = { searchQuery = it },
-        dynamicCategories = dynamicCategories,
-        filtered = filtered,
+        selectedCategory = uiState.selectedCategory,
+        onCategoryChange = { feedHomeViewModel.onCategoryChange(it) },
+        searchQuery = uiState.searchQuery,
+        onSearchQueryChange = { feedHomeViewModel.onSearchQueryChange(it) },
+        dynamicCategories = uiState.dynamicCategories,
+        filtered = uiState.filteredComponentes,
         onOpenReview = onOpenReview,
-        onOpenDetail = onOpenDetail
+        onOpenDetail = onOpenDetail,
+        onToggleFavorite = { feedHomeViewModel.toggleFavorite(it) }
     )
 }
 
@@ -63,9 +42,10 @@ fun FeedhomeScreenContent(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     dynamicCategories: List<String>,
-    filtered: List<Componente>,
+    filtered: List<ComponenteItem>,
     onOpenReview: (String) -> Unit = {},
-    onOpenDetail: (String) -> Unit = {}
+    onOpenDetail: (String) -> Unit = {},
+    onToggleFavorite: (String) -> Unit = {}
 ){
     LazyColumn(
         modifier = Modifier
@@ -133,6 +113,9 @@ fun FeedhomeScreenContent(
                 },
                 onInfoClick = {
                     onOpenDetail(item.id)
+                },
+                onFavoriteClick = {
+                    onToggleFavorite(item.id)
                 }
             )
         }
@@ -148,37 +131,5 @@ fun FeedhomeScreenContent(
 @Preview
 @Composable
 fun FeedHomeScreenComposable(){
-    FeedHomeScreen()
+    FeedHomeScreen(feedHomeViewModel = FeedHomeViewModel())
 }
-
-@Preview(showBackground = true)
-@Composable
-fun BuscadorPreview(){
-    Buscador(
-        searchQuery = "",
-        onSearchQueryChange = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FeedheaderPreview(){
-    FeedHeader()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MsgEncontradosPreview(){
-    MsgEncontrados(
-        count = 0
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NotFoundPreview(){
-    NotFound()
-}
-
-
-

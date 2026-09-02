@@ -1,88 +1,58 @@
 package movil.ratemypc.ui.screens.settings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Group
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Shield
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import movil.ratemypc.ui.screens.settings.SettingsComponents.DangerZoneCard
-import movil.ratemypc.ui.screens.settings.SettingsComponents.ProfileSettingsCard
-import movil.ratemypc.ui.screens.settings.SettingsComponents.SettingsHeader
-import movil.ratemypc.ui.screens.settings.SettingsComponents.SettingsOptionRow
-import movil.ratemypc.ui.screens.settings.SettingsComponents.SettingsSection
-import movil.ratemypc.ui.screens.settings.SettingsComponents.SettingsSwitchRow
+import movil.ratemypc.ui.screens.settings.SettingsComponents.*
 import movil.ratemypc.ui.theme.RateMyPcTheme
 
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit = {},
+    viewModel: SettingsViewModel,
     modifier: Modifier = Modifier
 ) {
-    var twoFactorEnabled by remember { mutableStateOf(false) }
-    var pushNotificationsEnabled by remember { mutableStateOf(true) }
-    var emailNotificationsEnabled by remember { mutableStateOf(false) }
-    var profileVisible by remember { mutableStateOf(true) }
-    var followersAllowed by remember { mutableStateOf(true) }
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var avatarChanged by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsState()
 
     SettingsScreenContent(
         modifier = modifier,
         onBack = onBack,
-        twoFactorEnabled = twoFactorEnabled,
-        onTwoFactorChange = { twoFactorEnabled = it },
-        pushNotificationsEnabled = pushNotificationsEnabled,
-        onPushNotificationsChange = { pushNotificationsEnabled = it },
-        emailNotificationsEnabled = emailNotificationsEnabled,
-        onEmailNotificationsChange = { emailNotificationsEnabled = it },
-        profileVisible = profileVisible,
-        onProfileVisibleChange = { profileVisible = it },
-        followersAllowed = followersAllowed,
-        onFollowersAllowedChange = { followersAllowed = it },
-        avatarChanged = avatarChanged,
-        onAvatarChange = { avatarChanged = !avatarChanged },
-        onDeleteAccountClick = { showDeleteDialog = true }
+        twoFactorEnabled = uiState.twoFactorEnabled,
+        onTwoFactorChange = { viewModel.onTwoFactorChange(it) },
+        pushNotificationsEnabled = uiState.pushNotificationsEnabled,
+        onPushNotificationsChange = { viewModel.onPushNotificationsChange(it) },
+        emailNotificationsEnabled = uiState.emailNotificationsEnabled,
+        onEmailNotificationsChange = { viewModel.onEmailNotificationsChange(it) },
+        profileVisible = uiState.profileVisible,
+        onProfileVisibleChange = { viewModel.onProfileVisibleChange(it) },
+        followersAllowed = uiState.followersAllowed,
+        onFollowersAllowedChange = { viewModel.onFollowersAllowedChange(it) },
+        avatarChanged = uiState.avatarChanged,
+        onAvatarChange = { viewModel.onAvatarChange() },
+        onDeleteAccountClick = { viewModel.setShowDeleteDialog(true) }
     )
 
-    if (showDeleteDialog) {
+    if (uiState.showDeleteDialog) {
         AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
+            onDismissRequest = { viewModel.setShowDeleteDialog(false) },
             title = { Text("¿Eliminar cuenta?") },
             text = { Text("Esta acción no se puede deshacer.") },
             confirmButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
+                TextButton(onClick = { viewModel.setShowDeleteDialog(false) }) {
                     Text("Eliminar", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
+                TextButton(onClick = { viewModel.setShowDeleteDialog(false) }) {
                     Text("Cancelar")
                 }
             }
@@ -112,7 +82,7 @@ fun SettingsScreenContent(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+        contentPadding = PaddingValues(
             horizontal = 20.dp,
             vertical = 16.dp
         ),
@@ -187,6 +157,6 @@ fun SettingsScreenContent(
 @Composable
 fun SettingsScreenPreview() {
     RateMyPcTheme {
-        SettingsScreen()
+        SettingsScreen(viewModel = SettingsViewModel())
     }
 }

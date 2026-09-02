@@ -1,44 +1,34 @@
 package movil.ratemypc.ui.screens.notifications
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import movil.ratemypc.data.NotificationFilter
 import movil.ratemypc.data.NotificationItem
 import movil.ratemypc.data.NotificationType
-import movil.ratemypc.data.local.LocalNotificationsProvider
-import movil.ratemypc.ui.screens.notifications.NotificationsComponents.EmptyNotifications
-import movil.ratemypc.ui.screens.notifications.NotificationsComponents.NotificationFilterTabs
-import movil.ratemypc.ui.screens.notifications.NotificationsComponents.NotificationItemCard
-import movil.ratemypc.ui.screens.notifications.NotificationsComponents.NotificationsHeader
+import movil.ratemypc.ui.screens.notifications.NotificationsComponents.*
 import movil.ratemypc.ui.theme.RateMyPcTheme
-import movil.ratemypc.viewmodel.NotificationViewModel
 
 @Composable
 fun NotificationsScreen(
     modifier: Modifier = Modifier,
-    viewModel: NotificationViewModel = viewModel(),
+    viewModel: NotificationsViewModel,
     navController: NavController
 ) {
-    val notifications by viewModel.notifications.collectAsState()
-    val selectedFilter by viewModel.selectedFilter.collectAsState()
-    val filteredNotifications = notifications.filter { notification ->
-        when (selectedFilter) {
+    val uiState by viewModel.uiState.collectAsState()
+    
+    val filteredNotifications = uiState.notifications.filter { notification ->
+        when (uiState.selectedFilter) {
             NotificationFilter.ALL -> true
             NotificationFilter.FOLLOWS -> notification.type == NotificationType.FOLLOW
             NotificationFilter.COMMENTS -> notification.type == NotificationType.COMMENT
@@ -49,11 +39,11 @@ fun NotificationsScreen(
     NotificationsScreenContent(
         modifier = modifier,
         notifications = filteredNotifications,
-        unreadCount = notifications.count { !it.isRead },
-        selectedFilter = selectedFilter,
-        onFilterChange = viewModel::selectFilter,
-        onMarkAllRead = viewModel::markAllAsRead,
-        onNotificationClick = viewModel::markAsRead
+        unreadCount = uiState.unreadCount,
+        selectedFilter = uiState.selectedFilter,
+        onFilterChange = { viewModel.onFilterChange(it) },
+        onMarkAllRead = { viewModel.markAllAsRead() },
+        onNotificationClick = { viewModel.onNotificationClick(it) }
     )
 }
 
@@ -105,6 +95,6 @@ fun NotificationsScreenContent(
 @Composable
 fun NotificationsScreenPreview() {
     RateMyPcTheme {
-        NotificationsScreen(navController = rememberNavController())
+        NotificationsScreen(navController = rememberNavController(), viewModel = NotificationsViewModel())
     }
 }

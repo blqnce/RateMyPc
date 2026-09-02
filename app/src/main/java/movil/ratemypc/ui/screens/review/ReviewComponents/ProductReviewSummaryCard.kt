@@ -26,10 +26,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import movil.ratemypc.data.Componente
+import movil.ratemypc.data.ComponenteItem
 
 @Composable
-fun ProductReviewSummaryCard(component: Componente) {
+fun ProductReviewSummaryCard(component: ComponenteItem) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),

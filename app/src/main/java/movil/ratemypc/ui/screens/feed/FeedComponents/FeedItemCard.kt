@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.ImageNotSupported
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Star
@@ -40,13 +42,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import movil.ratemypc.data.Componente
+import movil.ratemypc.data.ComponenteItem
 
 @Composable
 fun FeedItemCard(
-    item: Componente,
+    item: ComponenteItem,
     onClick: () -> Unit,
     onInfoClick: () -> Unit,
+    onFavoriteClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
 
@@ -198,6 +201,19 @@ fun FeedItemCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+                            IconButton(
+                                onClick = onFavoriteClick,
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .background(buttonBg, CircleShape)
+                            ) {
+                                Icon(
+                                    if (item.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    contentDescription = "Favorito",
+                                    modifier = Modifier.size(18.dp),
+                                    tint = if (item.isFavorite) MaterialTheme.colorScheme.primary else buttonIconTint
+                                )
+                            }
                             IconButton(
                                 onClick = onInfoClick,
                                 modifier = Modifier

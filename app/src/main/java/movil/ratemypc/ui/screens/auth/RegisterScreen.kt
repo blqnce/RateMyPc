@@ -12,52 +12,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import movil.ratemypc.ui.screens.auth.AuthComponents.Divider
-import movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents.LoginHeader
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterForm
+import movil.ratemypc.ui.screens.auth.RegisterViewModel
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterHeader
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.ToLogin
 
 @Composable
 fun RegisterScreen(
     onRegistered: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    viewModel: RegisterViewModel
 ) {
-
-    var name              by remember { mutableStateOf("") }
-    var email             by remember { mutableStateOf("") }
-    var password          by remember { mutableStateOf("") }
-    var confirmPassword   by remember { mutableStateOf("") }
-    var passwordVisible   by remember { mutableStateOf(false) }
-    var confirmVisible    by remember { mutableStateOf(false) }
-    var isLoading         by remember { mutableStateOf(false) }
-
-    var nameError         by remember { mutableStateOf<String?>(null) }
-    var emailError        by remember { mutableStateOf<String?>(null) }
-    var passwordError     by remember { mutableStateOf<String?>(null) }
-    var confirmError      by remember { mutableStateOf<String?>(null) }
-
-    fun validate(): Boolean {
-        nameError     = if (name.isBlank()) "Ingresa tu nombre" else null
-        emailError    = if (email.isBlank() || !email.contains("@")) "Ingresa un correo válido" else null
-        passwordError = when {
-            password.length < 6                -> "Mínimo 6 caracteres"
-            !password.any { it.isDigit() }     -> "Debe contener al menos un número"
-            !password.any { it.isUpperCase() } -> "Debe contener al menos una mayúscula"
-            else                               -> null
-        }
-        confirmError = if (confirmPassword != password) "Las contraseñas no coinciden" else null
-        return listOf(nameError, emailError, passwordError, confirmError).all { it == null }
-    }
-
-    fun onRegisterClick() {
-        if (!validate()) return
-        isLoading = true
-        // Simular registro
-        isLoading = false
-        onRegistered()
-    }
-
-    val scrollState  = rememberScrollState()
+    val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -65,24 +32,24 @@ fun RegisterScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         RegisterScreenContent(
-            name = name,
-            onNameChange = { name = it; nameError = null },
-            nameError = nameError,
-            email = email,
-            onEmailChange = { email = it; emailError = null },
-            emailError = emailError,
-            password = password,
-            onPasswordChange = { password = it; passwordError = null },
-            passwordError = passwordError,
-            passwordVisible = passwordVisible,
-            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
-            confirmPassword = confirmPassword,
-            onConfirmPasswordChange = { confirmPassword = it; confirmError = null },
-            confirmError = confirmError,
-            confirmVisible = confirmVisible,
-            onToggleConfirmVisibility = { confirmVisible = !confirmVisible },
-            isLoading = isLoading,
-            onRegisterClick = { onRegisterClick() },
+            name = uiState.name,
+            onNameChange = { viewModel.onNameChange(it) },
+            nameError = uiState.nameError,
+            email = uiState.email,
+            onEmailChange = { viewModel.onEmailChange(it) },
+            emailError = uiState.emailError,
+            password = uiState.password,
+            onPasswordChange = { viewModel.onPasswordChange(it) },
+            passwordError = uiState.passwordError,
+            passwordVisible = uiState.passwordVisible,
+            onTogglePasswordVisibility = { viewModel.onTogglePasswordVisibility() },
+            confirmPassword = uiState.confirmPassword,
+            onConfirmPasswordChange = { viewModel.onConfirmPasswordChange(it) },
+            confirmError = uiState.confirmError,
+            confirmVisible = uiState.confirmVisible,
+            onToggleConfirmVisibility = { viewModel.onToggleConfirmVisibility() },
+            isLoading = uiState.isLoading,
+            onRegisterClick = { viewModel.onRegisterClick(onRegistered) },
             scrollState = scrollState,
             onBack = onBack
         )
@@ -162,7 +129,7 @@ fun RegisterScreenContent(
 @Preview
 @Composable
 fun RegisterScreenComposable(){
-    RegisterScreen(onRegistered = {}, onBack = {})
+    RegisterScreen(onRegistered = {}, onBack = {}, viewModel = RegisterViewModel())
 }
 
 @Preview(showBackground = true)

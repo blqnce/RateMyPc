@@ -16,10 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import movil.ratemypc.data.Resena
+import movil.ratemypc.data.ResenaItem
 
 @Composable
-fun ReviewItemCard(resena: Resena) {
+fun ReviewItemCard(resena: ResenaItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

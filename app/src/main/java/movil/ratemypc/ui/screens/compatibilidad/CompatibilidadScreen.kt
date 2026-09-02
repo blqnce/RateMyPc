@@ -1,74 +1,42 @@
 package movil.ratemypc.ui.screens.compatibilidad
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.Button
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.ComponentChecklistRow
-import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.CompatibilityDetails
-import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.CompatibilityScoreCard
-import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.PowerBudgetCard
-import movil.ratemypc.ui.theme.RateMyPcTheme
-import movil.ratemypc.viewmodel.ComponenteViewModel
+import movil.ratemypc.data.ComponenteItem
+import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadComponents.*
 
 @Composable
 fun CompatibilidadScreen(
-    viewModel: ComponenteViewModel = viewModel(),
+    compatibilidadViewModel: CompatibilidadViewModel,
     modifier: Modifier = Modifier,
     onBack: () -> Unit
 ) {
-    val componentes by viewModel.componentes.collectAsState()
-    var analyzed by remember { mutableStateOf(false) }
-    val selectedComponents = componentes.take(2)
-    val selectedCategories = selectedComponents.map { it.subCategoria }.toSet()
-    val requiredCategories = listOf("CPU", "GPU", "MOBO", "RAM", "PSU", "Storage", "Case", "Cooler")
-    val score = (selectedCategories.size * 100 / requiredCategories.size).coerceAtMost(100)
-    val estimatedPower = selectedComponents.sumOf { it.consumoEnergetico.toDouble() }.toInt()
-    val powerLimit = 750
-    val totalCost = selectedComponents.sumOf { it.costo.toDouble() }
+    val uiState by compatibilidadViewModel.uiState.collectAsState()
 
     CompatibilidadScreenContent(
         modifier = modifier,
-        analyzed = analyzed,
-        onAnalyzeClick = { analyzed = true },
-        score = if (analyzed) score else 0,
-        estimatedPower = estimatedPower,
-        powerLimit = powerLimit,
-        totalCost = totalCost,
-        selectedComponents = selectedComponents,
-        selectedCategories = selectedCategories,
-        requiredCategories = requiredCategories,
+        analyzed = uiState.analyzed,
+        onAnalyzeClick = { compatibilidadViewModel.onAnalyzeClick() },
+        score = uiState.score,
+        estimatedPower = uiState.estimatedPower,
+        powerLimit = uiState.powerLimit,
+        totalCost = uiState.totalCost,
+        selectedComponents = uiState.selectedComponents,
+        selectedCategories = uiState.selectedCategories,
+        requiredCategories = uiState.requiredCategories,
         onBack = onBack
     )
 }
@@ -82,7 +50,7 @@ fun CompatibilidadScreenContent(
     estimatedPower: Int,
     powerLimit: Int,
     totalCost: Double,
-    selectedComponents: List<movil.ratemypc.data.Componente>,
+    selectedComponents: List<ComponenteItem>,
     selectedCategories: Set<String>,
     requiredCategories: List<String>,
     onBack: () -> Unit
@@ -222,11 +190,10 @@ fun CompatibilidadScreenContent(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun CompatibilidadScreenPreview() {
-    RateMyPcTheme {
-        CompatibilidadScreen(onBack = {})
+    movil.ratemypc.ui.theme.RateMyPcTheme {
+        CompatibilidadScreen(onBack = {}, compatibilidadViewModel = CompatibilidadViewModel())
     }
 }

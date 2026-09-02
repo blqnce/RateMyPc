@@ -3,19 +3,16 @@ package movil.ratemypc.ui.screens.perfil
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterHeader
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.Avatar
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.BuildCard
 import movil.ratemypc.ui.screens.perfil.PerfilComponents.InfoPerfil
@@ -23,13 +20,21 @@ import movil.ratemypc.ui.screens.perfil.PerfilComponents.TabPerfil
 
 @Composable
 fun PerfilScreen(
+    viewModel: PerfilViewModel,
     onOpenSettings: () -> Unit = {}
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val uiState by viewModel.uiState.collectAsState()
 
     PerfilScreenContent(
-        selectedTabIndex = selectedTabIndex,
-        onTabSelected = { selectedTabIndex = it },
+        selectedTabIndex = uiState.selectedTabIndex,
+        username = uiState.username,
+        bio = uiState.bio,
+        buildsCount = uiState.buildsCount,
+        reviewsCount = uiState.reviewsCount,
+        likesCount = uiState.likesCount,
+        followersCount = uiState.followersCount,
+        followingCount = uiState.followingCount,
+        onTabSelected = { viewModel.onTabSelected(it) },
         onOpenSettings = onOpenSettings
     )
 }
@@ -37,6 +42,13 @@ fun PerfilScreen(
 @Composable
 fun PerfilScreenContent(
     selectedTabIndex: Int,
+    username: String,
+    bio: String,
+    buildsCount: String,
+    reviewsCount: String,
+    likesCount: String,
+    followersCount: String,
+    followingCount: String,
     onTabSelected: (Int) -> Unit,
     onOpenSettings: () -> Unit = {}
 ){
@@ -87,13 +99,13 @@ fun PerfilScreenContent(
 
         item {
             InfoPerfil(
-                username = "TechWizard92",
-                bio = "Entusiasta de PCs - Desde 2022",
-                buildsCount = "12",
-                reviewsCount = "47",
-                likesCount = "2.4k",
-                followersCount = "831",
-                followingCount = "215"
+                username = username,
+                bio = bio,
+                buildsCount = buildsCount,
+                reviewsCount = reviewsCount,
+                likesCount = likesCount,
+                followersCount = followersCount,
+                followingCount = followingCount
             ) { /* Handle Follow */ }
             Spacer(Modifier.height(24.dp))
         }
@@ -127,46 +139,5 @@ fun PerfilScreenContent(
 @Preview
 @Composable
 fun PerfilScreenComposable() {
-    PerfilScreen()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AvatarPreview(){
-    Avatar()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BuildCardPreview(){
-    BuildCard(
-        title = "",
-        imageUrl = "",
-        likes = "",
-        componentsCount = "",
-        rating = ""
-    )
-}
-@Preview(showBackground = true)
-@Composable
-fun InfoPerfilPreview(){
-    InfoPerfil(
-        username = "",
-        bio = "",
-        buildsCount = "",
-        reviewsCount = "",
-        likesCount = "",
-        followersCount = "",
-        followingCount = "",
-        onFollowClick = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TabPerfilPreview(){
-    TabPerfil(
-        selectedTabIndex = 0,
-        onTabSelected = {}
-    )
+    PerfilScreen(viewModel = PerfilViewModel())
 }

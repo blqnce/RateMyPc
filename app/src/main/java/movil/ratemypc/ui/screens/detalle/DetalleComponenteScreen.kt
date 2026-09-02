@@ -6,39 +6,47 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import movil.ratemypc.data.Componente
+import movil.ratemypc.data.ComponenteItem
 import movil.ratemypc.ui.screens.detalle.DetalleComponents.DetalleHeader
 import movil.ratemypc.ui.screens.detalle.DetalleComponents.DetalleInfo
-import movil.ratemypc.viewmodel.ComponenteViewModel
 
 @Composable
 fun DetalleComponenteScreen(
     componenteId: String,
-    viewModel: ComponenteViewModel,
+    detalleViewModel: DetalleComponenteViewModel,
     onBack: () -> Unit
 ) {
-    val componentes by viewModel.componentes.collectAsState()
-    val componente = componentes.find { it.id == componenteId }
+    val uiState by detalleViewModel.uiState.collectAsState()
 
-    if (componente != null) {
+    LaunchedEffect(componenteId) {
+        detalleViewModel.loadComponente(componenteId)
+    }
+
+    uiState.componente?.let { componente ->
         DetalleComponenteContent(
             componente = componente,
             onBack = onBack
         )
-    } else {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
-            Text("Componente no encontrado")
+    } ?: run {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            if (uiState.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Text("Componente no encontrado")
+            }
         }
     }
 }
 
 @Composable
 fun DetalleComponenteContent(
-    componente: Componente,
+    componente: ComponenteItem,
     onBack: () -> Unit
 ) {
     Column(

@@ -1,6 +1,5 @@
 package movil.ratemypc.ui.screens.auth
 
-
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,30 +19,11 @@ import movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents.ToRegister
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onGoToRegister: () -> Unit
+    onGoToRegister: () -> Unit,
+    viewModel: LoginViewModel
 ) {
-    var email           by remember { mutableStateOf("") }
-    var password        by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var isLoading       by remember { mutableStateOf(false) }
-    var emailError      by remember { mutableStateOf<String?>(null) }
-    var passwordError   by remember { mutableStateOf<String?>(null) }
-
-    fun validate(): Boolean {
-        emailError    = if (email.isBlank() || !email.contains("@")) "Ingresa un correo válido" else null
-        passwordError = if (password.length < 6) "Mínimo 6 caracteres" else null
-        return emailError == null && passwordError == null
-    }
-
-    fun onLoginClick() {
-        if (!validate()) return
-        isLoading = true
-        // Simulación:
-        isLoading = false
-        onLoginSuccess()
-    }
-
-    val scrollState  = rememberScrollState()
+    val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -51,16 +31,16 @@ fun LoginScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         LoginScreenContent(
-            email = email,
-            onEmailChange = { email = it; emailError = null },
-            emailError = emailError,
-            password = password,
-            onPasswordChange = { password = it; passwordError = null },
-            passwordError = passwordError,
-            passwordVisible = passwordVisible,
-            onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
-            isLoading = isLoading,
-            onLoginClick = { onLoginClick() },
+            email = uiState.email,
+            onEmailChange = { viewModel.onEmailChange(it) },
+            emailError = uiState.emailError,
+            password = uiState.password,
+            onPasswordChange = { viewModel.onPasswordChange(it) },
+            passwordError = uiState.passwordError,
+            passwordVisible = uiState.passwordVisible,
+            onTogglePasswordVisibility = { viewModel.onTogglePasswordVisibility() },
+            isLoading = uiState.isLoading,
+            onLoginClick = { viewModel.onLoginClick(onLoginSuccess) },
             onGoToRegister = onGoToRegister,
             scrollState = scrollState
         )
@@ -121,5 +101,5 @@ fun LoginScreenContent(
 @Preview
 @Composable
 fun LoginScreenComposable(){
-    LoginScreen(onLoginSuccess = {}, onGoToRegister = {})
+    LoginScreen(onLoginSuccess = {}, onGoToRegister = {}, viewModel = LoginViewModel())
 }
