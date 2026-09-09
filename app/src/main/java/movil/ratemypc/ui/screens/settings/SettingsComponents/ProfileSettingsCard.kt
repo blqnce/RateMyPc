@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ProfileSettingsCard(
+    email: String,
     avatarChanged: Boolean,
     onChangeAvatar: () -> Unit,
     modifier: Modifier = Modifier
@@ -47,8 +48,8 @@ fun ProfileSettingsCard(
             )
             Spacer(Modifier.size(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text("TechWizard92", style = MaterialTheme.typography.titleMedium)
-                Text("techwizard92@email.com", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(email, style = MaterialTheme.typography.titleMedium)
+                Text(email, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             IconButton(onClick = onChangeAvatar) {
                 Icon(Icons.Outlined.CameraAlt, contentDescription = "Cambiar foto")

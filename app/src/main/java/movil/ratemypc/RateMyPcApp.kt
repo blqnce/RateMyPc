@@ -7,9 +7,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import movil.ratemypc.ui.navigation.RateMyPcBottomBar
-import movil.ratemypc.ui.navigation.RateMyPcNavHost
-import movil.ratemypc.ui.navigation.Screen
+import movil.ratemypc.navigation.RateMyPcBottomBar
+import movil.ratemypc.navigation.RateMyPcNavHost
+import movil.ratemypc.navigation.Screen
 import kotlin.collections.contains
 
 @Composable
@@ -32,7 +32,6 @@ fun RateMyPcApp(){
     ) { innerPadding ->
         RateMyPcNavHost(
             navController = navController,
-            isLoggedIn    = false,
             modifier      = Modifier.padding(innerPadding)
         )
     }

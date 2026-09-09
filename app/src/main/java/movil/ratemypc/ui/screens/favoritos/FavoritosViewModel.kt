@@ -1,6 +1,7 @@
 package movil.ratemypc.ui.screens.favoritos
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,7 +10,12 @@ import movil.ratemypc.data.local.LocalComponentesProvider
 import movil.ratemypc.data.local.LocalResenasProvider
 import kotlin.math.roundToInt
 
-class FavoritosViewModel : ViewModel() {
+import javax.inject.Inject
+
+// ViewModel para la pantalla de Favoritos.
+// Gestiona la lista de componentes que el usuario ha marcado como favoritos.
+@HiltViewModel
+class FavoritosViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavoritosState())
     val uiState: StateFlow<FavoritosState> = _uiState.asStateFlow()
@@ -18,6 +24,7 @@ class FavoritosViewModel : ViewModel() {
         loadInitialComponentes()
     }
 
+    // Carga y filtra los componentes marcados como favoritos desde los datos locales.
     private fun loadInitialComponentes() {
         val initialComponentes = LocalComponentesProvider.componentes.map { componente ->
             val resenas = LocalResenasProvider.resenas.filter { it.componenteId == componente.id }
@@ -32,15 +39,15 @@ class FavoritosViewModel : ViewModel() {
                 componente
             }
         }
-        // Assuming we start with an empty or default set of favorites if not persisted
-        // But for this local exercise, we'll just use them as they are
         _uiState.update { it.copy(favoritos = initialComponentes.filter { it.isFavorite }) }
     }
 
+    // Actualiza la pestaña seleccionada dentro de la pantalla de favoritos.
     fun onTabSelected(index: Int) {
         _uiState.update { it.copy(selectedTab = index) }
     }
 
+    // Elimina un componente de la lista de favoritos.
     fun toggleFavorite(componenteId: String) {
         _uiState.update { state ->
             val updatedFavoritos = state.favoritos.filter { it.id != componenteId }

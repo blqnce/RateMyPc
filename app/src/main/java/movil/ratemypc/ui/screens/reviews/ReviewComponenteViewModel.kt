@@ -1,6 +1,7 @@
 package movil.ratemypc.ui.screens.reviews
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,11 +10,17 @@ import movil.ratemypc.data.local.LocalComponentesProvider
 import movil.ratemypc.data.local.LocalResenasProvider
 import kotlin.math.roundToInt
 
-class ReviewComponenteViewModel : ViewModel() {
+import javax.inject.Inject
+
+// ViewModel para la pantalla de visualización de reseñas de un componente específico.
+// Filtra y procesa las reseñas disponibles para mostrar estadísticas y listas filtradas.
+@HiltViewModel
+class ReviewComponenteViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReviewComponenteState())
     val uiState: StateFlow<ReviewComponenteState> = _uiState.asStateFlow()
 
+    // Carga la información del componente y sus reseñas asociadas.
     fun loadData(componenteId: String) {
         val componente = LocalComponentesProvider.componentes.find { it.id == componenteId }
         val resenas = LocalResenasProvider.resenas.filter { it.componenteId == componenteId }
@@ -34,6 +41,7 @@ class ReviewComponenteViewModel : ViewModel() {
         _uiState.update { it.copy(componente = processedComponente, resenas = resenas) }
     }
 
+    // Cambia la fuente de las reseñas (Amazon, Newegg, etc.) para filtrar la lista mostrada.
     fun onSourceChange(source: String) {
         _uiState.update { it.copy(selectedSource = source) }
     }

@@ -1,6 +1,7 @@
 package movil.ratemypc.ui.screens.settings
 
 data class SettingsState(
+    val email: String = "",
     val twoFactorEnabled: Boolean = false,
     val pushNotificationsEnabled: Boolean = true,
     val emailNotificationsEnabled: Boolean = false,

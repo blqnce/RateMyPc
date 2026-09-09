@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,13 +22,14 @@ import movil.ratemypc.ui.screens.perfil.PerfilComponents.TabPerfil
 @Composable
 fun PerfilScreen(
     viewModel: PerfilViewModel,
-    onOpenSettings: () -> Unit = {}
+    onOpenSettings: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     PerfilScreenContent(
         selectedTabIndex = uiState.selectedTabIndex,
-        username = uiState.username,
+        email = uiState.email,
         bio = uiState.bio,
         buildsCount = uiState.buildsCount,
         reviewsCount = uiState.reviewsCount,
@@ -35,14 +37,17 @@ fun PerfilScreen(
         followersCount = uiState.followersCount,
         followingCount = uiState.followingCount,
         onTabSelected = { viewModel.onTabSelected(it) },
-        onOpenSettings = onOpenSettings
+        onOpenSettings = onOpenSettings,
+        onSignOut = {
+            viewModel.onSignOut(onNavigateToLogin)
+        }
     )
 }
 
 @Composable
 fun PerfilScreenContent(
     selectedTabIndex: Int,
-    username: String,
+    email: String,
     bio: String,
     buildsCount: String,
     reviewsCount: String,
@@ -50,7 +55,8 @@ fun PerfilScreenContent(
     followersCount: String,
     followingCount: String,
     onTabSelected: (Int) -> Unit,
-    onOpenSettings: () -> Unit = {}
+    onOpenSettings: () -> Unit = {},
+    onSignOut: () -> Unit = {}
 ){
     LazyColumn(
         modifier = Modifier
@@ -74,17 +80,31 @@ fun PerfilScreenContent(
                     ),
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                IconButton(
-                    onClick = onOpenSettings,
-                    modifier = Modifier
-                        .size(40.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "Ajustes",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(20.dp)
-                    )
+                Row {
+                    IconButton(
+                        onClick = onOpenSettings,
+                        modifier = Modifier
+                            .size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "Ajustes",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    IconButton(
+                        onClick = onSignOut,
+                        modifier = Modifier
+                            .size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Logout,
+                            contentDescription = "Cerrar sesión",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
             }
             Spacer(Modifier.height(16.dp))
@@ -99,7 +119,7 @@ fun PerfilScreenContent(
 
         item {
             InfoPerfil(
-                username = username,
+                email = email,
                 bio = bio,
                 buildsCount = buildsCount,
                 reviewsCount = reviewsCount,
@@ -136,8 +156,18 @@ fun PerfilScreenContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PerfilScreenComposable() {
-    PerfilScreen(viewModel = PerfilViewModel())
+    PerfilScreenContent(
+        selectedTabIndex = 0,
+        email = "",
+        bio = "Entusiasta de PCs - Desde 2022",
+        buildsCount = "12",
+        reviewsCount = "47",
+        likesCount = "2.4k",
+        followersCount = "831",
+        followingCount = "215",
+        onTabSelected = {}
+    )
 }

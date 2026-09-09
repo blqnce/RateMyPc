@@ -16,6 +16,9 @@ import movil.ratemypc.data.ComponenteItem
 import movil.ratemypc.ui.screens.detalle.DetalleComponents.DetalleHeader
 import movil.ratemypc.ui.screens.detalle.DetalleComponents.DetalleInfo
 
+import androidx.compose.ui.res.stringResource
+import movil.ratemypc.R
+
 @Composable
 fun DetalleComponenteScreen(
     componenteId: String,
@@ -28,17 +31,19 @@ fun DetalleComponenteScreen(
         detalleViewModel.loadComponente(componenteId)
     }
 
-    uiState.componente?.let { componente ->
+    val componente = uiState.componente
+
+    if (componente != null) {
         DetalleComponenteContent(
             componente = componente,
             onBack = onBack
         )
-    } ?: run {
+    } else {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             if (uiState.isLoading) {
                 CircularProgressIndicator()
             } else {
-                Text("Componente no encontrado")
+                Text(stringResource(R.string.componente_no_encontrado))
             }
         }
     }
@@ -70,7 +75,7 @@ fun DetalleComponenteContent(
                 .padding(horizontal = 20.dp),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text("Agregar a mi Build")
+            Text(stringResource(R.string.agregar_a_mi_build))
         }
         
         Spacer(modifier = Modifier.height(32.dp))

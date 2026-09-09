@@ -1,12 +1,10 @@
 package movil.ratemypc.ui.screens.auth.AuthComponents.LoginComponents
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -15,7 +13,6 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +42,6 @@ fun LoginForm(
     passwordError: String?,
     passwordVisible: Boolean,
     onTogglePasswordVisibility: () -> Unit,
-    isLoading: Boolean,
     onLoginClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -55,7 +51,7 @@ fun LoginForm(
         OutlinedTextField(
             value         = email,
             onValueChange = onEmailChange,
-            label         = { Text("Correo electrónico") },
+            label         = { Text(stringResource(R.string.correo_electr_nico)) },
             leadingIcon   = { Icon(Icons.Outlined.Email, contentDescription = null) },
             isError       = emailError != null,
             supportingText = emailError?.let { { Text(it) } },
@@ -77,7 +73,7 @@ fun LoginForm(
         OutlinedTextField(
             value         = password,
             onValueChange = onPasswordChange,
-            label         = { Text("Contraseña") },
+            label         = { Text(stringResource(R.string.contrase_a)) },
             leadingIcon   = { Icon(Icons.Outlined.Lock, contentDescription = null) },
             trailingIcon  = {
                 IconButton(onClick = onTogglePasswordVisibility) {
@@ -123,29 +119,15 @@ fun LoginForm(
 
         Button(
             onClick  = onLoginClick,
-            enabled  = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
             shape = MaterialTheme.shapes.small
         ) {
-            AnimatedContent(
-                targetState = isLoading,
-                label       = "login_button"
-            ) { loading ->
-                if (loading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(22.dp),
-                        color    = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    Text(
-                        text  = stringResource(R.string.ingresar),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-            }
+            Text(
+                text  = stringResource(R.string.ingresar),
+                style = MaterialTheme.typography.titleMedium
+            )
         }
     }
 

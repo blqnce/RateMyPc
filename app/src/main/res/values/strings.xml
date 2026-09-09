@@ -46,4 +46,24 @@
     <string name="notifications_type_like">Nuevo me gusta</string>
     <string name="notifications_empty_title">Sin notificaciones</string>
     <string name="notifications_empty_message">Estás al día con todo</string>
+
+    <!-- Strings añadidos -->
+    <string name="componente_no_encontrado">Componente no encontrado</string>
+    <string name="agregar_a_mi_build">Agregar a mi Build</string>
+    <string name="escribir_una_resena">Escribir una reseña</string>
+    <string name="buscar_componentes">Buscar componentes</string>
+    <string name="comparte_tus_impresiones">Comparte tus impresiones, pros, contras y calidad general...</string>
+    <string name="comprobar_compatibilidad">Comprobar compatibilidad</string>
+    <string name="danger_zone">Zona de Peligro</string>
+    <string name="eliminar_cuenta_permanente">Eliminar tu cuenta es una acción permanente.</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="confirmar_eliminar_cuenta">¿Eliminar cuenta?</string>
+    <string name="accion_no_deshacer">Esta acción no se puede deshacer.</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="puntuacion_compatibilidad">Puntuación de compatibilidad</string>
+    <string name="problemas_detectados">Problemas detectados</string>
+    <string name="puntos_destacados">Puntos destacados</string>
+    <string name="presupuesto_energia">Presupuesto de energía</string>
+    <string name="adjunta_una_foto">Adjunta una foto</string>
 </resources>

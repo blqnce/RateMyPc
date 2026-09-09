@@ -1,9 +1,10 @@
-package movil.ratemypc.ui.navigation
+package movil.ratemypc.navigation
 
 sealed class Screen(val route: String) {
 
     object Login       : Screen("login")
     object Register    : Screen("register")
+    object Splash      : Screen("splash")
     object FeedHome : Screen("feed")
     object Favoritos : Screen("favoritos")
     object Compatibilidad : Screen("compatibilidad")

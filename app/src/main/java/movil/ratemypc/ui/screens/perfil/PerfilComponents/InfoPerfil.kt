@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -16,7 +15,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InfoPerfil(
-    username: String,
+    email: String,
     bio: String,
     buildsCount: String,
     reviewsCount: String,
@@ -32,7 +31,7 @@ fun InfoPerfil(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = username,
+            text = email,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.ExtraBold,
             color = MaterialTheme.colorScheme.onBackground

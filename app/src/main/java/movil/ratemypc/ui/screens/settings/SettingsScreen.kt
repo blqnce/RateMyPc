@@ -26,6 +26,7 @@ fun SettingsScreen(
     SettingsScreenContent(
         modifier = modifier,
         onBack = onBack,
+        email = uiState.email,
         twoFactorEnabled = uiState.twoFactorEnabled,
         onTwoFactorChange = { viewModel.onTwoFactorChange(it) },
         pushNotificationsEnabled = uiState.pushNotificationsEnabled,
@@ -64,6 +65,7 @@ fun SettingsScreen(
 fun SettingsScreenContent(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
+    email: String,
     twoFactorEnabled: Boolean,
     onTwoFactorChange: (Boolean) -> Unit,
     pushNotificationsEnabled: Boolean,
@@ -94,6 +96,7 @@ fun SettingsScreenContent(
 
         item {
             ProfileSettingsCard(
+                email = email,
                 avatarChanged = avatarChanged,
                 onChangeAvatar = onAvatarChange,
                 modifier = Modifier.fillMaxWidth()
@@ -102,7 +105,7 @@ fun SettingsScreenContent(
 
         item {
             SettingsSection(title = "Account") {
-                SettingsOptionRow(Icons.Outlined.Email, "Cambiar correo", "techwizard92@email.com")
+                SettingsOptionRow(Icons.Outlined.Email, "Cambiar correo", email)
                 SettingsOptionRow(Icons.Outlined.Lock, "Cambiar contraseña", "Actualiza tu contraseña")
                 SettingsSwitchRow(
                     icon = Icons.Outlined.Shield,
@@ -157,6 +160,22 @@ fun SettingsScreenContent(
 @Composable
 fun SettingsScreenPreview() {
     RateMyPcTheme {
-        SettingsScreen(viewModel = SettingsViewModel())
+        SettingsScreenContent(
+            onBack = {},
+            email = "preview@example.com",
+            twoFactorEnabled = false,
+            onTwoFactorChange = {},
+            pushNotificationsEnabled = true,
+            onPushNotificationsChange = {},
+            emailNotificationsEnabled = false,
+            onEmailNotificationsChange = {},
+            profileVisible = true,
+            onProfileVisibleChange = {},
+            followersAllowed = true,
+            onFollowersAllowedChange = {},
+            avatarChanged = false,
+            onAvatarChange = {},
+            onDeleteAccountClick = {}
+        )
     }
 }

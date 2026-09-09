@@ -1,6 +1,7 @@
 package movil.ratemypc.ui.screens.detalle
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,11 +10,17 @@ import movil.ratemypc.data.local.LocalComponentesProvider
 import movil.ratemypc.data.local.LocalResenasProvider
 import kotlin.math.roundToInt
 
-class DetalleComponenteViewModel : ViewModel() {
+import javax.inject.Inject
+
+// ViewModel para la pantalla de detalles de un componente.
+// Obtiene la información técnica y las calificaciones actualizadas de un producto específico.
+@HiltViewModel
+class DetalleComponenteViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetalleComponenteState())
     val uiState: StateFlow<DetalleComponenteState> = _uiState.asStateFlow()
 
+    // Busca y carga los detalles de un componente por su ID, incluyendo el cálculo de su calificación promedio.
     fun loadComponente(componenteId: String) {
         val componente = LocalComponentesProvider.componentes.find { it.id == componenteId }
         val processedComponente = componente?.let { item ->

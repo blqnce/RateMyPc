@@ -1,4 +1,4 @@
-package movil.ratemypc.ui.navigation
+package movil.ratemypc.navigation
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable

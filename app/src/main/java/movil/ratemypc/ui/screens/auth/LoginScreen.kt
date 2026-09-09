@@ -39,7 +39,6 @@ fun LoginScreen(
             passwordError = uiState.passwordError,
             passwordVisible = uiState.passwordVisible,
             onTogglePasswordVisibility = { viewModel.onTogglePasswordVisibility() },
-            isLoading = uiState.isLoading,
             onLoginClick = { viewModel.onLoginClick(onLoginSuccess) },
             onGoToRegister = onGoToRegister,
             scrollState = scrollState
@@ -57,7 +56,6 @@ fun LoginScreenContent(
     passwordError: String?,
     passwordVisible: Boolean,
     onTogglePasswordVisibility: () -> Unit,
-    isLoading: Boolean,
     onLoginClick: () -> Unit,
     onGoToRegister: () -> Unit,
     scrollState: ScrollState
@@ -82,7 +80,6 @@ fun LoginScreenContent(
             passwordError = passwordError,
             passwordVisible = passwordVisible,
             onTogglePasswordVisibility = onTogglePasswordVisibility,
-            isLoading = isLoading,
             onLoginClick = onLoginClick
         )
 
@@ -98,8 +95,20 @@ fun LoginScreenContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenComposable(){
-    LoginScreen(onLoginSuccess = {}, onGoToRegister = {}, viewModel = LoginViewModel())
+    LoginScreenContent(
+        email = "",
+        onEmailChange = {},
+        emailError = null,
+        password = "password",
+        onPasswordChange = {},
+        passwordError = null,
+        passwordVisible = false,
+        onTogglePasswordVisibility = {},
+        onLoginClick = {},
+        onGoToRegister = {},
+        scrollState = rememberScrollState()
+    )
 }
