@@ -41,7 +41,8 @@ fun LoginScreen(
             onTogglePasswordVisibility = { viewModel.onTogglePasswordVisibility() },
             onLoginClick = { viewModel.onLoginClick(onLoginSuccess) },
             onGoToRegister = onGoToRegister,
-            scrollState = scrollState
+            scrollState = scrollState,
+            error = uiState.error
         )
     }
 }
@@ -58,7 +59,8 @@ fun LoginScreenContent(
     onTogglePasswordVisibility: () -> Unit,
     onLoginClick: () -> Unit,
     onGoToRegister: () -> Unit,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    error: String?
 ){
     Column(
         modifier = Modifier
@@ -70,6 +72,15 @@ fun LoginScreenContent(
         LoginHeader()
 
         Spacer(Modifier.height(48.dp))
+
+        if (error != null) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
 
         LoginForm(
             email = email,
@@ -109,6 +120,7 @@ fun LoginScreenComposable(){
         onTogglePasswordVisibility = {},
         onLoginClick = {},
         onGoToRegister = {},
-        scrollState = rememberScrollState()
+        scrollState = rememberScrollState(),
+        error = null
     )
 }

@@ -50,7 +50,8 @@ fun RegisterScreen(
             isLoading = uiState.isLoading,
             onRegisterClick = { viewModel.onRegisterClick(onRegistered) },
             scrollState = scrollState,
-            onBack = onBack
+            onBack = onBack,
+            error = uiState.error
         )
     }
 }
@@ -76,7 +77,8 @@ fun RegisterScreenContent(
     isLoading: Boolean,
     onRegisterClick: () -> Unit,
     scrollState: ScrollState,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    error: String?
 ){
     Column(
         modifier = Modifier
@@ -90,6 +92,15 @@ fun RegisterScreenContent(
         RegisterHeader()
 
         Spacer(Modifier.height(32.dp))
+
+        if (error != null) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
 
         RegisterForm(
             name = name,
@@ -148,7 +159,8 @@ fun RegisterScreenComposable(){
         isLoading = false,
         onRegisterClick = {},
         scrollState = rememberScrollState(),
-        onBack = {}
+        onBack = {},
+        error = null
     )
 }
 

@@ -66,4 +66,5 @@
     <string name="puntos_destacados">Puntos destacados</string>
     <string name="presupuesto_energia">Presupuesto de energía</string>
     <string name="adjunta_una_foto">Adjunta una foto</string>
+    <string name="credenciales_incorrectas">Correo o contraseña incorrectos</string>
 </resources>
