@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "809868193717",
+    "project_id": "ratemypc-de313",
+    "storage_bucket": "ratemypc-de313.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809868193717:android:c6038ce004e5938004b3fc",
+        "android_client_info": {
+          "package_name": "movil.ratemypc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPMrRUkPrUhUZ8uFxaDTEQAh7IgIpuB8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
