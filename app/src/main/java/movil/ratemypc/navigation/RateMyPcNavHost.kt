@@ -1,52 +1,51 @@
-package movil.ratemypc.ui.navigation
+package movil.ratemypc.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import movil.ratemypc.ui.screens.auth.LoginScreen
-import movil.ratemypc.ui.screens.auth.LoginViewModel
 import movil.ratemypc.ui.screens.auth.RegisterScreen
-import movil.ratemypc.ui.screens.auth.RegisterViewModel
 import movil.ratemypc.ui.screens.feed.FeedHomeScreen
-import movil.ratemypc.ui.screens.feed.FeedHomeViewModel
 import movil.ratemypc.ui.screens.favoritos.FavoritosScreen
-import movil.ratemypc.ui.screens.favoritos.FavoritosViewModel
 import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadScreen
-import movil.ratemypc.ui.screens.compatibilidad.CompatibilidadViewModel
 import movil.ratemypc.ui.screens.perfil.PerfilScreen
-import movil.ratemypc.ui.screens.perfil.PerfilViewModel
 import movil.ratemypc.ui.screens.reviews.ReviewComponenteScreen
-import movil.ratemypc.ui.screens.reviews.ReviewComponenteViewModel
 import movil.ratemypc.ui.screens.detalle.DetalleComponenteScreen
-import movil.ratemypc.ui.screens.detalle.DetalleComponenteViewModel
 import movil.ratemypc.ui.screens.settings.SettingsScreen
-import movil.ratemypc.ui.screens.settings.SettingsViewModel
 import movil.ratemypc.ui.screens.notifications.NotificationsScreen
-import movil.ratemypc.ui.screens.notifications.NotificationsViewModel
 import movil.ratemypc.ui.screens.review.WriteReviewScreen
-import movil.ratemypc.ui.screens.review.WriteReviewViewModel
+import movil.ratemypc.ui.screens.splash.SplashScreen
 
 @Composable
 fun RateMyPcNavHost(
     navController: NavHostController,
-    isLoggedIn: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val startDestination = when {
-        !isLoggedIn             -> Screen.Login.route
-        else                    -> Screen.FeedHome.route
-    }
-
     NavHost(
         navController    = navController,
-        startDestination = startDestination,
+        startDestination = Screen.Splash.route,
         modifier         = modifier
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                splashViewModel = hiltViewModel(),
+                navigateToHome = {
+                    navController.navigate(Screen.FeedHome.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                navigateToStart = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Screen.Login.route) {
-            val loginViewModel: LoginViewModel = viewModel()
             LoginScreen(
                 onLoginSuccess = {
                     navController.navigate(Screen.FeedHome.route) {
@@ -56,25 +55,25 @@ fun RateMyPcNavHost(
                 onGoToRegister = {
                     navController.navigate(Screen.Register.route)
                 },
-                viewModel = loginViewModel
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.Register.route) {
-            val registerViewModel: RegisterViewModel = viewModel()
             RegisterScreen(
-                onRegistered = { navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }},
+                onRegistered = {
+                    navController.navigate(Screen.FeedHome.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
                 onBack = { navController.popBackStack() },
-                viewModel = registerViewModel
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.FeedHome.route) {
-            val feedHomeViewModel: FeedHomeViewModel = viewModel()
             FeedHomeScreen(
-                feedHomeViewModel = feedHomeViewModel,
+                feedHomeViewModel = hiltViewModel(),
                 onOpenReview = { componenteId ->
                     navController.navigate(Screen.Review.createRoute(componenteId))
                 },
@@ -85,9 +84,8 @@ fun RateMyPcNavHost(
         }
 
         composable(Screen.Favoritos.route) {
-            val favoritosViewModel: FavoritosViewModel = viewModel()
             FavoritosScreen(
-                favoritosViewModel = favoritosViewModel,
+                favoritosViewModel = hiltViewModel(),
                 onOpenCompatibility = {
                     navController.navigate(Screen.Compatibilidad.route)
                 }
@@ -95,68 +93,66 @@ fun RateMyPcNavHost(
         }
 
         composable(Screen.Compatibilidad.route) {
-            val compatibilidadViewModel: CompatibilidadViewModel = viewModel()
             CompatibilidadScreen(
-                compatibilidadViewModel = compatibilidadViewModel,
+                compatibilidadViewModel = hiltViewModel(),
                 onBack = { navController.popBackStack() }
             )
         }
 
 
         composable(Screen.Perfil.route) {
-            val perfilViewModel: PerfilViewModel = viewModel()
             PerfilScreen(
                 onOpenSettings = { navController.navigate(Screen.Settings.route) },
-                viewModel = perfilViewModel
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.Notifications.route) {
-            val notificationsViewModel: NotificationsViewModel = viewModel()
             NotificationsScreen(
                 navController = navController,
-                viewModel = notificationsViewModel
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.Settings.route) {
-            val settingsViewModel: SettingsViewModel = viewModel()
             SettingsScreen(
                 onBack = { navController.popBackStack() },
-                viewModel = settingsViewModel
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.Review.route) { backStackEntry ->
             val componenteId = backStackEntry.arguments?.getString("componenteId") ?: ""
-            val reviewViewModel: ReviewComponenteViewModel = viewModel()
             ReviewComponenteScreen(
                 componenteId = componenteId,
                 onBack = { navController.popBackStack() },
                 onWriteReview = { navController.navigate(Screen.WriteReview.createRoute(componenteId)) },
-                viewModel = reviewViewModel
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.WriteReview.route) { backStackEntry ->
             val componenteId = backStackEntry.arguments?.getString("componenteId") ?: ""
-            val writeReviewViewModel: WriteReviewViewModel = viewModel()
             WriteReviewScreen(
                 componenteId = componenteId,
                 onBack = { navController.popBackStack() },
                 onSubmit = { _, _, _, _ ->
                     navController.popBackStack()
                 },
-                viewModel = writeReviewViewModel
+                viewModel = hiltViewModel()
             )
         }
 
         composable(Screen.Detalle.route) { backStackEntry ->
             val componenteId = backStackEntry.arguments?.getString("componenteId") ?: ""
-            val detalleViewModel: DetalleComponenteViewModel = viewModel()
             DetalleComponenteScreen(
                 componenteId = componenteId,
-                detalleViewModel = detalleViewModel,
+                detalleViewModel = hiltViewModel(),
                 onBack = { navController.popBackStack() }
             )
         }
