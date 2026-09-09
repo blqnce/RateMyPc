@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import movil.ratemypc.ui.screens.auth.AuthComponents.Divider
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterForm
-import movil.ratemypc.ui.screens.auth.RegisterViewModel
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.RegisterHeader
 import movil.ratemypc.ui.screens.auth.AuthComponents.RegisterComponents.ToLogin
 
@@ -126,10 +125,31 @@ fun RegisterScreenContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun RegisterScreenComposable(){
-    RegisterScreen(onRegistered = {}, onBack = {}, viewModel = RegisterViewModel())
+    RegisterScreenContent(
+        name = "",
+        onNameChange = {},
+        nameError = null,
+        email = "",
+        onEmailChange = {},
+        emailError = null,
+        password = "password123",
+        onPasswordChange = {},
+        passwordError = null,
+        passwordVisible = false,
+        onTogglePasswordVisibility = {},
+        confirmPassword = "password123",
+        onConfirmPasswordChange = {},
+        confirmError = null,
+        confirmVisible = false,
+        onToggleConfirmVisibility = {},
+        isLoading = false,
+        onRegisterClick = {},
+        scrollState = rememberScrollState(),
+        onBack = {}
+    )
 }
 
 @Preview(showBackground = true)

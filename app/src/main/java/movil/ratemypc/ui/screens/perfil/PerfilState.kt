@@ -2,7 +2,7 @@ package movil.ratemypc.ui.screens.perfil
 
 data class PerfilState(
     val selectedTabIndex: Int = 0,
-    val username: String = "TechWizard92",
+    val email: String = "",
     val bio: String = "Entusiasta de PCs - Desde 2022",
     val buildsCount: String = "12",
     val reviewsCount: String = "47",
